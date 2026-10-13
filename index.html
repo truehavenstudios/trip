@@ -628,7 +628,7 @@ input[type=date].inp,input[type=time].inp{min-width:0;width:100%;-webkit-appeara
 .invite>div:first-child{flex:1 1 260px;min-width:0}
 </style></head>
 <body data-theme="Ocean"><div id="root"></div>
-<script>window.BP_DEMO=true;window.BP_SHOP="https://www.etsy.com/shop/TrueHavenStudios";window.BP_VERSION="1.0.0";window.BP_SYNC_URL="https://truehaven-sync.fishing-switzerland.workers.dev";</script>
+<script>window.BP_DEMO=true;window.BP_SHOP="https://www.etsy.com/shop/TrueHavenStudios";window.BP_VERSION="1.1.0";window.BP_SYNC_URL="https://truehaven-sync.fishing-switzerland.workers.dev";</script>
 <script>const te = new TextEncoder();
   const QR = (() => {
     const ECC = [-1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26];
@@ -814,7 +814,7 @@ function loadGroups() {
 const COLS = ["info", "members", "plan", "ideas", "votes", "exp", "wallet", "pack", "photos"];
 function blankData() { const d = {}; COLS.forEach(c => d[c] = {}); return d; }
 function migrateGroup(g) {
-  const o = { gid: String(g.gid || uid()), code: typeof g.code === "string" ? g.code : "", reg: !!g.reg, ver: +g.ver || 0, me: g.me || "", dirty: !!g.dirty, lastSync: +g.lastSync || 0, gone: !!g.gone, d: cleanData(g.d) };
+  const o = { gid: String(g.gid || uid()), local: !!g.local, code: typeof g.code === "string" ? g.code : "", reg: !!g.reg, ver: +g.ver || 0, me: g.me || "", dirty: !!g.dirty, lastSync: +g.lastSync || 0, gone: !!g.gone, d: cleanData(g.d) };
   return o;
 }
 // make a (possibly remote) data object safe: only known collections, only object records with an id and a number upd
@@ -846,6 +846,7 @@ const info = () => (D().info || {}).info || { name: "Trip", emoji: "✈️", cur
 const members = () => live("members").sort((a, b) => (a.n || 0) - (b.n || 0) || (a.name || "").localeCompare(b.name || ""));
 const mem = id => (D().members || {})[id] || { id, name: "Someone", color: 0 };
 const me = () => (cur() || {}).me || "";
+const solo = () => !!info().solo;          // a solo trip: one traveller, no splitting or voting (can become a group later)
 // every change goes through put(): only fields that really change get a new time stamp (_t), so two people editing
 // different fields of the same record (one renames the trip, the other sets the budget) both keep their change
 const sameV = (a, b) => JSON.stringify(a) === JSON.stringify(b);
@@ -1044,7 +1045,7 @@ const GS = (() => {
   }
   function pillHTML() {
     const g = cur(); if (!g) return "";
-    const s = DEMO ? "demo" : !enabled() ? "local" : g.gone ? "gone" : !g.reg ? ((st[g.gid] || {}).s === "offline" ? "offline" : "setup") : ((st[g.gid] || {}).s || (g.dirty ? "pending" : "synced"));
+    const s = DEMO ? "demo" : (!enabled() || g.local) ? "local" : g.gone ? "gone" : !g.reg ? ((st[g.gid] || {}).s === "offline" ? "offline" : "setup") : ((st[g.gid] || {}).s || (g.dirty ? "pending" : "synced"));
     const T = { demo: ["Demo", "mid"], local: ["On this device", "mid"], gone: ["Code changed", "bad"], setup: ["Setting up…", "mid"], syncing: ["Syncing…", "mid"], pending: ["Saving…", "mid"],
       synced: ["Synced · " + ago(g.lastSync), "ok"], offline: ["Offline – will sync", "warn"], error: ["Sync problem", "bad"], toolarge: ["Too big to sync", "bad"], limited: ["Busy – retrying", "warn"] }[s] || ["", "mid"];
     return `<button class="gpill ${T[1]}" data-gpill data-act="goGroup" title="Group sync"><i></i><span>${T[0]}</span></button>`;
@@ -1077,7 +1078,7 @@ const GS = (() => {
   }
   function gone(g) { g.gone = true; g.dirty = false; save(g.gid); status(g.gid, "gone"); if (g.gid === A.active && typeof rerender === "function") rerender(); }
   async function sync(gid) {
-    const g = G[gid]; if (!g || !enabled() || g.gone) return;
+    const g = G[gid]; if (!g || !enabled() || g.gone || g.local) return;
     const S1 = st[gid] = st[gid] || {};
     if (S1.busy) { S1.again = true; return; }
     S1.busy = true; clearTimeout(S1.timer); status(gid, "syncing");
@@ -1112,7 +1113,7 @@ const GS = (() => {
       else if (["offline", "error", "limited"].includes(end)) soon(gid, 20000);
     }
   }
-  function soon(gid, ms = 1200) { if (!enabled() || !G[gid]) return; const S1 = st[gid] = st[gid] || {}; clearTimeout(S1.timer); S1.timer = setTimeout(() => sync(gid), ms); }
+  function soon(gid, ms = 1200) { if (!enabled() || !G[gid] || G[gid].local) return; const S1 = st[gid] = st[gid] || {}; clearTimeout(S1.timer); S1.timer = setTimeout(() => sync(gid), ms); }
 
   // ---------------------------------------------------------------- join, new code, delete for everyone
   async function fetchGroup(code) {
@@ -1263,11 +1264,11 @@ function head(kicker, title, acts = "") {
 const NAV = [["trip", "Overview", "home"], ["plan", "Plan", "cal"], ["ideas", "Ideas", "idea"], ["money", "Money", "money"], ["wallet", "Wallet", "ticket"], ["pack", "Packing", "bag"], ["group", "Group", "users"]];
 function switcher(cls = "") {
   const i = info(), ms = members();
-  return `<button class="gswitch ${cls}" data-act="groups" aria-label="Switch group"><span class="gemo">${esc(i.emoji || "✈️")}</span><span class="gnm"><b>${esc(i.name || "Trip")}</b><small>${plural(ms.length, "person", "people")}${A.order.length > 1 ? " · " + A.order.length + " groups" : ""}</small></span>${ic("down2")}</button>`;
+  return `<button class="gswitch ${cls}" data-act="groups" aria-label="Switch trip"><span class="gemo">${esc(i.emoji || "✈️")}</span><span class="gnm"><b>${esc(i.name || "Trip")}</b><small>${i.solo ? "Solo trip" : plural(ms.length, "person", "people")}${A.order.length > 1 ? " · " + A.order.length + " trips" : ""}</small></span>${ic("down2")}</button>`;
 }
 function shell(content) {
   const r = route();
-  const nav = NAV.map(([id, name, icon]) => `<a class="nav ${r === id ? "on" : ""}" href="#/${id}">${ic(icon)}<span>${name}</span>${id === "money" && owesMe() ? `<span class="badge">${owesMe()}</span>` : ""}</a>`).join("");
+  const nav = NAV.map(([id, name, icon]) => id === "group" && solo() ? [id, "Trip & devices", "devices"] : [id, name, icon]).map(([id, name, icon]) => `<a class="nav ${r === id ? "on" : ""}" href="#/${id}">${ic(icon)}<span>${name}</span>${id === "money" && owesMe() ? `<span class="badge">${owesMe()}</span>` : ""}</a>`).join("");
   const demo = DEMO ? `<div class="banner">You're trying the free demo – nothing you type is saved. <a href="${esc(window.BP_SHOP)}" target="_blank" rel="noopener">Get the full app on Etsy</a></div>` : "";
   const tab = (id, n, i) => `<a href="#/${id}" class="${r === id ? "on" : ""}">${ic(i)}${n}</a>`;
   return `${demo}<div class="app"><aside class="side">
@@ -1287,46 +1288,54 @@ function banners() {
   const g = cur(); if (!g || DEMO) return "";
   let h = "";
   if (g.gone) h += `<div class="note warnn mt0 mb">${ic("key")}<span class="grow"><b>This group got a new code.</b> Someone in the group made a new code, so this copy stopped syncing. Ask them for the new link – your copy stays here.</span><button class="btn sm" data-act="joinStart">Enter new code</button></div>`;
-  if (!g.me || !(D().members || {})[g.me] || D().members[g.me].del) h += `<div class="note mt0 mb">${ic("users")}<span class="grow"><b>Who are you?</b> Pick your name so the app knows what you paid and what you owe.</span><button class="btn sm pri" data-act="whoAmI">Pick my name</button></div>`;
+  if (!solo() && (!g.me || !(D().members || {})[g.me] || D().members[g.me].del)) h += `<div class="note mt0 mb">${ic("users")}<span class="grow"><b>Who are you?</b> Pick your name so the app knows what you paid and what you owe.</span><button class="btn sm pri" data-act="whoAmI">Pick my name</button></div>`;
   return h;
 }
-const owesMe = () => { const b = balances()[me()]; return b && b < -0.004 ? "!" : ""; };
+const owesMe = () => { if (solo()) return ""; const b = balances()[me()]; return b && b < -0.004 ? "!" : ""; };
 
 // ------------------------------------------------------------ overview
 function vTrip() {
   const i = info(), ph = phase(), ms = members(), b = balances(), my = b[me()] || 0;
   const cnt = ph.k === "before" ? `<div class="cd"><b>${ph.left}</b><span>${ph.left === 1 ? "day to go" : "days to go"}</span></div>` : ph.k === "during" ? `<div class="cd"><b>Day ${ph.day}</b><span>of ${ph.of}</span></div>` : ph.k === "after" ? `<div class="cd"><b>Home</b><span>${ph.ago ? plural(ph.ago, "day") + " ago" : "today"}</span></div>` : "";
   const hero = `<section class="thero"><div class="thl"><div class="caps">${okDate(i.start) ? `${dshort(i.start)} – ${dshort(i.end)}` : "Dates to come"}</div><h1 class="tname">${esc(i.emoji || "✈️")} ${esc(i.name)}</h1>
-    <div class="avs">${ms.map(m => av(m)).join("")}<button class="btn sm" data-act="goGroup">${ic("users")}Invite</button></div></div>${cnt}</section>`;
+    <div class="avs">${solo() ? `<span class="badge">${ic("pin")} solo trip</span><button class="btn sm" data-act="inviteStart">${ic("users")}Travel with others?</button>` : ms.map(m => av(m)).join("") + `<button class="btn sm" data-act="goGroup">${ic("users")}Invite</button>`}</div></div>${cnt}</section>`;
   const dayKey = ph.k === "during" ? today() : ph.k === "before" ? i.start : null;
   const di = dayKey ? dayItems(dayKey) : [];
   const todayCard = card(ph.k === "during" ? "Today · " + dlong(today()) : ph.k === "before" ? "Day 1 · " + dlong(i.start) : "Your trip", dayKey ? (di.length ? `<div class="list">${di.map(planRow).join("")}</div>` : `<div class="empty">Nothing planned for this day yet.<br><button class="btn sm mt" data-act="planAdd" data-d="${dayKey}">${ic("plus")}Add a plan</button></div>`)
-    : `<p class="muted">You spent ${money(totalSpent())} together. ${settle().length ? "Settle up so everyone is even." : "Everyone is square. ✨"}</p>`, { right: `<a class="lnk" href="#/plan">Open plan</a>` });
+    : `<p class="muted">${solo() ? `You spent ${money(totalSpent())} on this trip.${info().budget ? ` Budget ${money(info().budget, undefined, true)}.` : ""}` : `You spent ${money(totalSpent())} together. ${settle().length ? "Settle up so everyone is even." : "Everyone is square. ✨"}`}</p>`, { right: `<a class="lnk" href="#/plan">Open plan</a>` });
   const st = settle();
-  const moneyBody = `<div class="bal ${my > 0.004 ? "pos" : my < -0.004 ? "neg" : ""}"><span>${my > 0.004 ? "You're owed" : my < -0.004 ? "You owe" : "You're all square"}</span><b>${Math.abs(my) > 0.004 ? money(Math.abs(my)) : "✓"}</b></div>
+  const moneyBody = solo() ? soloMoney() : `<div class="bal ${my > 0.004 ? "pos" : my < -0.004 ? "neg" : ""}"><span>${my > 0.004 ? "You're owed" : my < -0.004 ? "You owe" : "You're all square"}</span><b>${Math.abs(my) > 0.004 ? money(Math.abs(my)) : "✓"}</b></div>
     ${i.budget ? budgetBar() : ""}
     ${st.length ? `<div class="list mt">${st.slice(0, 3).map(stRow).join("")}</div>${st.length > 3 ? `<a class="link" href="#/money">+ ${st.length - 3} more</a>` : ""}` : ""}
     <div class="row wrap mt"><button class="btn pri sm" data-act="expAdd">${ic("plus")}Add expense</button><a class="btn sm" href="#/money">${ic("money")}Money</a></div>`;
   const top = ideas().filter(x => !x.planned).slice(0, 3);
   const ideaBody = top.length ? `<div class="list">${top.map(x => `<div class="item">${thumb(x, "sm")}<div class="grow"><div class="nm">${esc(x.title)}</div><div class="tiny muted">${costLine(x)}</div></div>${voteBtn(x)}</div>`).join("")}</div>`
-    : `<div class="empty">No ideas yet. Suggest a place – the group votes.<br><button class="btn sm mt" data-act="ideaAdd">${ic("plus")}Suggest a place</button></div>`;
+    : `<div class="empty">${solo() ? "No ideas yet. Collect the places you'd love to see." : "No ideas yet. Suggest a place – the group votes."}<br><button class="btn sm mt" data-act="ideaAdd">${ic("plus")}${solo() ? "Add a place" : "Suggest a place"}</button></div>`;
   const nextW = live("wallet").filter(w => w.title && (w.date || "") >= today()).sort((a, b) => (a.date + (a.time || "")).localeCompare(b.date + (b.time || "")))[0];
   const pk = live("pack").filter(p => p.text && packFor(p)), done = pk.filter(p => p.done).length;
   const extra = `${nextW ? `<div class="item">${wIcon(nextW)}<div class="grow"><div class="nm">${esc(nextW.title)}</div><div class="tiny muted">${dlong(nextW.date)}${nextW.time ? " · " + esc(nextW.time) : ""}${nextW.ref ? " · " + esc(nextW.ref) : ""}</div></div><a class="iconbtn" href="#/wallet">${ic("right")}</a></div>` : `<div class="item"><span class="emo">${ic("ticket")}</span><div class="grow"><div class="nm">Travel wallet</div><div class="tiny muted">Flights, stays and tickets – offline.</div></div><a class="iconbtn" href="#/wallet">${ic("right")}</a></div>`}
     <div class="item"><span class="emo">${ic("bag")}</span><div class="grow"><div class="nm">Packing · ${done} of ${pk.length}</div><div class="bar a mt0" style="margin-top:6px"><i style="width:${pk.length ? done / pk.length * 100 : 0}%"></i></div></div><a class="iconbtn" href="#/pack">${ic("right")}</a></div>`;
   const est = planPP(), sh = myShare(me());
-  const costs = `<div class="tots"><div><b>${money(est, undefined, true)}</b><span>planned per person</span></div><div><b>${money(sh, undefined, true)}</b><span>your share so far</span></div></div>`;
+  const costs = solo() ? `<div class="tots"><div><b>${money(est, undefined, true)}</b><span>planned</span></div><div><b>${money(totalSpent(), undefined, true)}</b><span>spent so far</span></div></div>`
+    : `<div class="tots"><div><b>${money(est, undefined, true)}</b><span>planned per person</span></div><div><b>${money(sh, undefined, true)}</b><span>your share so far</span></div></div>`;
   return hero + `<div class="grid g2 start mt">${todayCard}${card("Money", moneyBody, { b: true })}</div>
     <div class="grid g2 start mt">${card("Top ideas", ideaBody, { soft: "soft", right: `<a class="lnk" href="#/ideas">All ideas</a>` })}<div class="col">${card("Costs", costs, { soft: "softb" })}${card("Wallet & packing", `<div class="list">${extra}</div>`, { tight: true })}</div></div>`;
 }
+function soloMoney() {
+  const i = info(), tot = totalSpent(), cats = byCat().slice(0, 3), left = r2(i.budget - tot);
+  return `<div class="bal ${i.budget && left < -0.004 ? "neg" : ""}"><span>${i.budget ? (left >= 0 ? "Left to spend" : "Over budget") : "Spent so far"}</span><b>${money(i.budget ? Math.abs(left) : tot, undefined, true)}</b></div>
+    ${i.budget ? budgetBar() : ""}
+    ${cats.length ? `<div class="list mt">${cats.map(c => `<div class="item"><span class="emo">${CATS[c.k][1]}</span><span class="grow small">${CATS[c.k][0]}</span><span class="amt">${money(c.v, undefined, true)}</span></div>`).join("")}</div>` : ""}
+    <div class="row wrap mt"><button class="btn pri sm" data-act="expAdd">${ic("plus")}Add expense</button><a class="btn sm" href="#/money">${ic("money")}Money</a>${i.budget ? "" : `<button class="btn sm" data-act="tripEdit">Set a budget</button>`}</div>`;
+}
 function budgetBar() {
   const i = info(), sh = myShare(me()), pct = i.budget ? sh / i.budget : 0;
-  return `<div class="mt"><div class="row sb small"><span>Your share ${money(sh, undefined, true)}</span><span class="muted">budget ${money(i.budget, undefined, true)} each</span></div><div class="bar thick ${pct > 1 ? "over" : ""}" style="margin-top:6px"><i style="width:${Math.min(100, pct * 100)}%"></i></div></div>`;
+  return `<div class="mt"><div class="row sb small"><span>${solo() ? "Spent" : "Your share"} ${money(sh, undefined, true)}</span><span class="muted">budget ${money(i.budget, undefined, true)}${solo() ? "" : " each"}</span></div><div class="bar thick ${pct > 1 ? "over" : ""}" style="margin-top:6px"><i style="width:${Math.min(100, pct * 100)}%"></i></div></div>`;
 }
 const stRow = t => `<div class="item st">${av(mem(t.from))}<span class="small grow"><b>${esc(mem(t.from).name)}</b> pays <b>${esc(mem(t.to).name)}</b></span><span class="amt">${money(t.amount)}</span><button class="btn sm" data-act="settleOne" data-f="${t.from}" data-t="${t.to}" data-a="${t.amount}">Paid</button></div>`;
 
 // ------------------------------------------------------------ plan
-function costLine(x) { const c = num(x.cost); if (!c) return x.place ? esc(x.place) : "No cost"; const pp = costPP(x); return `${money(pp, undefined, pp >= 100)} per person${x.place ? " · " + esc(x.place) : ""}`; }
+function costLine(x) { const c = num(x.cost); if (!c) return x.place ? esc(x.place) : "No cost"; const pp = costPP(x); return `${money(pp, undefined, pp >= 100)}${solo() ? "" : " per person"}${x.place ? " · " + esc(x.place) : ""}`; }
 function thumb(x, cls = "") { const p = photo(x.photo); return p ? `<img class="thumb ${cls}" src="${p}" alt="" data-act="viewPhoto" data-id="${x.photo}">` : `<span class="thumb ${cls} ph" style="--h:${(x.title || "").length * 37 % 360}">${esc(x.emoji || "📍")}</span>`; }
 function planRow(p) {
   return `<div class="item click prow" data-act="planEdit" data-id="${p.id}"><span class="ptime">${p.time ? esc(p.time) : "–"}</span>${thumb(p, "sm")}<div class="grow"><div class="nm">${esc(p.title)}</div><div class="tiny muted">${costLine(p)}${p.note ? " · " + esc(p.note).slice(0, 80) : ""}</div></div>${p.place ? `<a class="iconbtn" href="${mapsLink(p.place)}" target="_blank" rel="noopener" data-stop="1" aria-label="Open in Maps">${ic("pin")}</a>` : ""}</div>`;
@@ -1335,33 +1344,34 @@ function vPlan() {
   const td = tripDays(), others = planItems().filter(p => !td.includes(p.date)).sort((a, b) => a.date.localeCompare(b.date));
   const idle = ideas().filter(x => !x.planned).length;
   const day = (d, k) => { const it = dayItems(d), c = r2(it.reduce((a, p) => a + costPP(p), 0));
-    return `<section class="card dayc ${d === today() ? "now" : ""}"><div class="band ${k % 2 ? "b" : ""}"><span class="t">Day ${k + 1} · ${dlong(d)}</span><span class="r">${c ? money(c, undefined, true) + " pp" : ""}<button class="lnk" data-act="planAdd" data-d="${d}">+ Add</button></span></div>
+    return `<section class="card dayc ${d === today() ? "now" : ""}"><div class="band ${k % 2 ? "b" : ""}"><span class="t">Day ${k + 1} · ${dlong(d)}</span><span class="r">${c ? money(c, undefined, true) + (solo() ? "" : " pp") : ""}<button class="lnk" data-act="planAdd" data-d="${d}">+ Add</button></span></div>
     <div class="body tight">${it.length ? `<div class="list">${it.map(planRow).join("")}</div>` : `<p class="muted small" style="margin:8px 0">Free day – or <button class="link" data-act="planAdd" data-d="${d}">add a plan</button>${idle ? ` or <a class="link" href="#/ideas">pick from ${plural(idle, "idea")}</a>` : ""}.</p>`}</div></section>`; };
   return head("Day by day", "Plan", `<button class="btn" data-act="tripEdit">${ic("cal")}Dates</button><button class="btn pri" data-act="planAdd">${ic("plus")}Add a plan</button>`)
-    + `<div class="tots t3 mb"><div><b>${td.length}</b><span>days</span></div><div><b>${planItems().length}</b><span>plans</span></div><div><b>${money(planPP(), undefined, true)}</b><span>planned per person</span></div></div>`
+    + `<div class="tots t3 mb"><div><b>${td.length}</b><span>days</span></div><div><b>${planItems().length}</b><span>plans</span></div><div><b>${money(planPP(), undefined, true)}</b><span>${solo() ? "planned" : "planned per person"}</span></div></div>`
     + (td.length ? `<div class="days">${td.map(day).join("")}</div>` : `<div class="empty">Set your travel dates to see every day. <button class="btn sm" data-act="tripEdit">Set dates</button></div>`)
     + (others.length ? `<h2 class="sec">Outside your dates</h2><div class="card pad"><div class="list">${others.map(p => `<div class="dayhead">${dlong(p.date)}</div>` + planRow(p)).join("")}</div></div>` : "");
 }
 
 // ------------------------------------------------------------ ideas
 let IF = "open";
-function voteBtn(x) { const on = voted(x.id); return `<button class="vote ${on ? "on" : ""}" data-act="vote" data-id="${x.id}" aria-pressed="${on}">${ic("thumb")}<b>${x.nv ?? votesFor(x.id).length}</b></button>`; }
+function voteBtn(x) { if (solo()) return ""; const on = voted(x.id); return `<button class="vote ${on ? "on" : ""}" data-act="vote" data-id="${x.id}" aria-pressed="${on}">${ic("thumb")}<b>${x.nv ?? votesFor(x.id).length}</b></button>`; }
 function vIdeas() {
   const all = ideas(), list = all.filter(x => IF === "all" || (IF === "open" ? !x.planned : x.planned)), ms = members();
   const cardI = x => { const vs = votesFor(x.id).map(v => mem(v.who));
     return `<article class="icard">${photo(x.photo) ? `<img class="iimg" src="${photo(x.photo)}" alt="" data-act="viewPhoto" data-id="${x.photo}">` : `<div class="iimg ph" style="--h:${(x.title || "").length * 37 % 360}"><span>${esc(x.emoji || "📍")}</span></div>`}
       <div class="ib"><div class="row sb top"><div class="grow"><h3>${esc(x.title)}</h3><div class="tiny muted">${costLine(x)}</div></div>${voteBtn(x)}</div>
       ${x.note ? `<p class="small muted inote">${esc(x.note)}</p>` : ""}
-      <div class="row sb wrap ifoot"><span class="avs sm">${vs.map(m => av(m, "xs")).join("")}<span class="tiny faint">${vs.length ? (vs.length === ms.length ? "everyone" : vs.length + " of " + ms.length) : "no votes yet"}</span></span>
+      <div class="row sb wrap ifoot"><span class="avs sm">${solo() ? "" : `${vs.map(m => av(m, "xs")).join("")}<span class="tiny faint">${vs.length ? (vs.length === ms.length ? "everyone" : vs.length + " of " + ms.length) : "no votes yet"}</span>`}</span>
       <span class="row">${x.link ? `<a class="iconbtn" href="${esc(x.link)}" target="_blank" rel="noopener" aria-label="Open link">${ic("link")}</a>` : ""}${x.place ? `<a class="iconbtn" href="${mapsLink(x.place)}" target="_blank" rel="noopener" aria-label="Maps">${ic("pin")}</a>` : ""}<button class="iconbtn" data-act="ideaEdit" data-id="${x.id}" aria-label="Edit">${ic("edit")}</button>
       ${x.planned ? `<span class="badge ok">${ic("check")} ${dshort(x.planned)}</span>` : `<button class="btn sm pri" data-act="ideaPlan" data-id="${x.id}">Add to plan</button>`}</span></div></div></article>`; };
-  return head("Places you want to go", "Ideas", `<button class="btn pri" data-act="ideaAdd">${ic("plus")}Suggest a place</button>`)
-    + `<div class="row sb wrap mb"><div class="seg">${[["open", "Not planned"], ["planned", "Planned"], ["all", "All"]].map(([k, l]) => `<button class="${IF === k ? "on" : ""}" data-act="ideaFilter" data-v="${k}">${l}</button>`).join("")}</div><span class="tiny muted">Most votes first · photos ${Math.round(photoBytes() / PHOTO_BUDGET * 100)}% of trip space</span></div>`
-    + (list.length ? `<div class="igrid">${list.map(cardI).join("")}</div>` : `<div class="empty">${all.length ? "Nothing here." : "Collect places you'd love to see – with a photo, the cost and a link. Everyone votes, the winners go into the plan."}<br><button class="btn sm mt" data-act="ideaAdd">${ic("plus")}Suggest a place</button></div>`);
+  return head("Places you want to go", "Ideas", `<button class="btn pri" data-act="ideaAdd">${ic("plus")}${solo() ? "Add a place" : "Suggest a place"}</button>`)
+    + `<div class="row sb wrap mb"><div class="seg">${[["open", "Not planned"], ["planned", "Planned"], ["all", "All"]].map(([k, l]) => `<button class="${IF === k ? "on" : ""}" data-act="ideaFilter" data-v="${k}">${l}</button>`).join("")}</div><span class="tiny muted">${solo() ? "Newest first" : "Most votes first"} · photos ${Math.round(photoBytes() / PHOTO_BUDGET * 100)}% of trip space</span></div>`
+    + (list.length ? `<div class="igrid">${list.map(cardI).join("")}</div>` : `<div class="empty">${all.length ? "Nothing here." : solo() ? "Collect places you'd love to see – with a photo, the cost and a link. Add the best ones to your plan." : "Collect places you'd love to see – with a photo, the cost and a link. Everyone votes, the winners go into the plan."}<br><button class="btn sm mt" data-act="ideaAdd">${ic("plus")}${solo() ? "Add a place" : "Suggest a place"}</button></div>`);
 }
 
 // ------------------------------------------------------------ money
 function vMoney() {
+  if (solo()) return vMoneySolo();
   const ms = members(), b = balances(), st = settle(), i = info(), tot = totalSpent(), my = b[me()] || 0, ex = expenses();
   const tiles = `<div class="tiles t4">${tile("Spent together", money(tot, undefined, true), plural(spends().length, "expense"))}${tile("Your share", money(myShare(me()), undefined, true), i.budget ? "budget " + money(i.budget, undefined, true) : "")}${tile("You paid", money(paidBy(me()), undefined, true), "")}${tile("Your balance", money(Math.abs(my)), my > 0.004 ? "you're owed" : my < -0.004 ? "you owe" : "all square", my > 0.004 ? "ok" : my < -0.004 ? "bad" : "")}</div>`;
   const maxB = Math.max(1, ...Object.values(b).map(Math.abs));
@@ -1378,9 +1388,31 @@ function vMoney() {
     + tiles + `<div class="grid g2 start mt">${card("Who owes whom", balBody, { b: true, id: "mbal" })}${card("Where the money goes", donut + (dayBars ? `<h3 class="sub3">Per day</h3>${dayBars}` : ""), { id: "mchart" })}</div>
     <div class="grid g2 start mt">${card("Expenses", `<div class="list">${exList}</div>`, { tight: true, right: `<button class="lnk" data-act="exportCsv">CSV</button>` })}${card("Everyone's share" + (i.budget ? " vs budget" : ""), `<div class="bals">${shareRows}</div><p class="help mt">Planned so far: ${money(planPP(), undefined, true)} per person from the plan.${i.budget ? "" : ` <button class="link" data-act="tripEdit">Set a budget</button>`}</p>`, { soft: "softb", id: "mshare" })}</div>`;
 }
+function moneyCharts() {
+  const tot = totalSpent(), cats = byCat(), cs = cats.reduce((a, c) => a + c.v, 0) || 1, CC = ["var(--p4)", "var(--p2)", "var(--p1)", "var(--p5)", "var(--p3)", "var(--p7)", "var(--p10)"];
+  const donut = cats.length ? `<div class="donutwrap">${donutSvg(cats.map((c, k) => [c.v, CC[k % CC.length], CATS[c.k][0] + " " + money(c.v, undefined, true)]), money(tot, undefined, true), "spent")}<div class="legend">${cats.map((c, k) => `<div><span class="dot" style="background:${CC[k % CC.length]}"></span><span class="grow">${CATS[c.k][1]} ${CATS[c.k][0]}</span><span class="v">${money(c.v, undefined, true)} · ${Math.round(c.v / cs * 100)}%</span></div>`).join("")}</div></div>` : `<div class="empty">Charts appear after the first expense.</div>`;
+  const bd = byDay(), td = tripDays().length ? tripDays() : Object.keys(bd).sort(), mx = Math.max(1, ...td.map(d => bd[d] || 0));
+  const dayBars = td.length && Object.keys(bd).length ? `<div class="dbars">${td.map(d => `<div class="db" data-tip="${dlong(d)} · ${money(bd[d] || 0, undefined, true)}"><i style="height:${(bd[d] || 0) / mx * 100}%"></i><span>${pd(d).getDate()}</span></div>`).join("")}</div>` : "";
+  return donut + (dayBars ? `<h3 class="sub3">Per day</h3>${dayBars}` : "");
+}
+function vMoneySolo() {
+  const i = info(), tot = totalSpent(), ex = expenses(), left = r2(i.budget - tot), ph = phase();
+  const daysN = tripDays().length, spentDays = Object.keys(byDay()).length || 1;
+  const perDay = r2(tot / spentDays), daysLeft = ph.k === "during" ? Math.max(1, ph.of - ph.day + 1) : ph.k === "before" ? daysN : 0;
+  const tiles = `<div class="tiles t4">${tile("Spent", money(tot, undefined, true), plural(ex.length, "expense"))}${tile("Budget", i.budget ? money(i.budget, undefined, true) : "–", i.budget ? "for the whole trip" : `<button class="link" data-act="tripEdit">Set a budget</button>`)}${tile(i.budget && left < 0 ? "Over budget" : "Left", i.budget ? money(Math.abs(left), undefined, true) : "–", i.budget && daysLeft && left > 0 ? money(left / daysLeft, undefined, true) + " a day for " + plural(daysLeft, "day") : "", i.budget ? (left < 0 ? "bad" : "ok") : "")}${tile("Per day", money(perDay, undefined, true), "on days you spent")}</div>`;
+  const pct = i.budget ? tot / i.budget : 0;
+  const budget = i.budget ? `<div class="row sb small"><span>Spent ${money(tot, undefined, true)}</span><span class="muted">budget ${money(i.budget, undefined, true)}</span></div><div class="bar thick ${pct > 1 ? "over" : ""}" style="margin-top:6px"><i style="width:${Math.min(100, pct * 100)}%"></i></div>
+      <p class="help mt">${pct > 1 ? "Over budget by " + money(-left, undefined, true) + "." : Math.round(pct * 100) + "% used."} Planned in your plan: ${money(planPP(), undefined, true)}.</p>`
+    : `<p class="small">Set a budget for the trip and see what's left every day.</p><button class="btn sm" data-act="tripEdit">Set a budget</button><p class="help mt">Planned in your plan: ${money(planPP(), undefined, true)}.</p>`;
+  const groups = {}; ex.forEach(e => (groups[e.date || "?"] = groups[e.date || "?"] || []).push(e));
+  const exList = ex.length ? Object.keys(groups).sort().reverse().map(d => `<div class="dayhead">${okDate(d) ? dlong(d) : "No date"}</div>` + groups[d].map(expRow).join("")).join("") : `<div class="empty">No expenses yet. Add what you pay as you go – the charts fill in by themselves.</div>`;
+  return head("Your spending", "Money", `<button class="btn pri" data-act="expAdd">${ic("plus")}Add expense</button>`)
+    + tiles + `<div class="grid g2 start mt">${card("Where the money goes", moneyCharts(), { b: true, id: "mchart" })}${card("Budget", budget, { soft: "softb", id: "mshare" })}</div>
+    <div class="mt">${card("Expenses", `<div class="list">${exList}</div>`, { tight: true, right: `<button class="lnk" data-act="exportCsv">CSV</button>` })}</div>`;
+}
 function expRow(e) {
   const s = shares(e), ids = Object.keys(s), p = mem(e.paidBy);
-  const sub = e.kind === "transfer" ? `payment to ${esc(mem(e.to).name)}` : `${esc(p.name)} paid · ${ids.length === members().length ? "split by everyone" : "for " + ids.map(id => esc(mem(id).name)).join(", ")}`;
+  const sub = e.kind === "transfer" ? `payment to ${esc(mem(e.to).name)}` : solo() ? (CATS[e.cat] || CATS.other)[0] : `${esc(p.name)} paid · ${ids.length === members().length ? "split by everyone" : "for " + ids.map(id => esc(mem(id).name)).join(", ")}`;
   return `<div class="item click" data-act="expEdit" data-id="${e.id}">${e.kind === "transfer" ? `<span class="emo">${ic("swap")}</span>` : `<span class="emo">${(CATS[e.cat] || CATS.other)[1]}</span>`}<div class="grow"><div class="nm">${esc(e.title || (e.kind === "transfer" ? "Payment" : "Expense"))}</div><div class="tiny muted">${sub}${e.cur && e.cur !== info().cur ? ` · ${money(num(e.amount), e.cur)}` : ""}</div></div><span class="amt">${money(inTrip(e))}</span></div>`;
 }
 function donutSvg(parts, big, small) {
@@ -1411,14 +1443,15 @@ function vPack() {
   const who = p => p.who === "shared" ? `<span class="badge b">shared</span>` : p.who ? av(mem(p.who), "xs") : `<span class="badge">everyone</span>`;
   const SUG = ["Passport / ID", "Phone charger", "Adapter plug", "Sunscreen", "Medicine", "Swimwear", "Comfy shoes", "Headphones", "Travel insurance", "Cash"];
   return head("Don't forget", "Packing", "")
-    + `<div class="card pad mb"><div class="row wrap"><input class="inp grow" id="packIn" placeholder="Add something to pack…" style="flex:1 1 220px"><select class="inp" id="packWho" style="width:auto">${opt("", "Everyone", "")}${opt("shared", "Shared (one is enough)", "")}${members().map(m => opt(m.id, m.name, "")).join("")}</select><button class="btn pri" data-act="packAdd">${ic("plus")}Add</button></div>
+    + `<div class="card pad mb"><div class="row wrap"><input class="inp grow" id="packIn" placeholder="Add something to pack…" style="flex:1 1 220px">${solo() ? `<input type="hidden" id="packWho" value="">` : `<select class="inp" id="packWho" style="width:auto">${opt("", "Everyone", "")}${opt("shared", "Shared (one is enough)", "")}${members().map(m => opt(m.id, m.name, "")).join("")}</select>`}<button class="btn pri" data-act="packAdd">${ic("plus")}Add</button></div>
       ${all.length < 4 ? `<div class="cats mt0" style="margin-top:12px">${SUG.filter(s => !all.some(p => p.text === s)).map(s => `<button class="cat" data-act="packSug" data-v="${esc(s)}">+ ${esc(s)}</button>`).join("")}</div>` : ""}</div>
-      <div class="row sb wrap mb"><div class="seg">${[["all", "Everything"], ["mine", "Mine"], ["shared", "Shared"]].map(([k, l]) => `<button class="${PF === k ? "on" : ""}" data-act="packFilter" data-v="${k}">${l}</button>`).join("")}</div><span class="small muted">${done} of ${list.length} packed</span></div>`
-    + (list.length ? `<div class="card pad"><div class="list">${list.map(p => `<div class="item pk ${p.done ? "done" : ""}"><button class="chk ${p.done ? "on" : ""}" data-act="packTick" data-id="${p.id}" aria-label="Packed">${ic("check")}</button><span class="grow nm">${esc(p.text)}</span>${who(p)}<button class="iconbtn" data-act="packDel" data-id="${p.id}" aria-label="Remove">${ic("x")}</button></div>`).join("")}</div></div>` : `<div class="empty">Nothing on the list yet.</div>`);
+      <div class="row sb wrap mb">${solo() ? "<span></span>" : `<div class="seg">${[["all", "Everything"], ["mine", "Mine"], ["shared", "Shared"]].map(([k, l]) => `<button class="${PF === k ? "on" : ""}" data-act="packFilter" data-v="${k}">${l}</button>`).join("")}</div>`}<span class="small muted">${done} of ${list.length} packed</span></div>`
+    + (list.length ? `<div class="card pad"><div class="list">${list.map(p => `<div class="item pk ${p.done ? "done" : ""}"><button class="chk ${p.done ? "on" : ""}" data-act="packTick" data-id="${p.id}" aria-label="Packed">${ic("check")}</button><span class="grow nm">${esc(p.text)}</span>${solo() ? "" : who(p)}<button class="iconbtn" data-act="packDel" data-id="${p.id}" aria-label="Remove">${ic("x")}</button></div>`).join("")}</div></div>` : `<div class="empty">Nothing on the list yet.</div>`);
 }
 
 // ------------------------------------------------------------ group
 function vGroup() {
+  if (solo()) return vSoloTrip();
   const g = cur(), i = info(), ms = members(), code = g.code;
   const invite = DEMO ? `<p class="small">In the full app your group gets its own code, for example <b class="gcode sm">K7QM-4TZP</b>. Friends tap your link or type the code – and see the same trip.</p>`
     : !GS.enabled() ? `<p class="small">Group sync isn't switched on in this copy.</p>`
@@ -1439,13 +1472,31 @@ function vGroup() {
     <div class="grid g2 start mt">${card("The trip", trip, { soft: "soft" })}${card("Group settings", danger, { tight: true })}</div>`;
 }
 
+function vSoloTrip() {
+  const g = cur(), i = info(), code = g.code;
+  const trip = `<div class="list"><div class="item"><span class="emo">${esc(i.emoji || "✈️")}</span><div class="grow"><div class="nm">${esc(i.name)}</div><div class="tiny muted">${okDate(i.start) ? dlong(i.start) + " – " + dlong(i.end) : "No dates yet"} · ${esc(i.cur)}${i.budget ? " · budget " + money(i.budget, undefined, true) : ""}</div></div><button class="btn sm" data-act="tripEdit">${ic("edit")}Edit</button></div></div>`;
+  const dev = DEMO ? `<p class="small">In the full app you can open your trip on your phone and computer – end-to-end encrypted, no account.</p>`
+    : !GS.enabled() ? `<p class="small">This trip is saved on this device.</p>`
+    : g.local ? `<p class="small">This trip is saved on this device only. Turn on sync to have it on your phone <b>and</b> computer – end-to-end encrypted, no account, nobody else sees it.</p><button class="btn pri" data-act="soloSync">${ic("devices")}Turn on sync</button>`
+    : g.gone ? `<p class="small badc">This copy stopped syncing because the trip got a new code. Enter the new code from your other device.</p><button class="btn pri" data-act="joinStart">Enter new code</button>`
+    : !g.reg ? `<p class="small">Your private code appears as soon as you're online.</p><p class="help">${ic("sync")} ${GS.state(g.gid) === "offline" ? "Offline – will try again." : "Setting up…"}</p>`
+    : `<div class="invite"><div><div class="caps">Your private code</div><div class="gcode">${GS.fmt(code)}</div><p class="small muted" style="margin:6px 0 12px">On your other device: open this link – or Trip Planner › Join with a code. Keep it to yourself: anyone with the code sees this trip.</p>
+      <div class="row wrap"><button class="btn" data-act="copy" data-v="${esc(GS.link(code))}" data-w="Link copied">${ic("link")}Copy link</button><button class="btn" data-act="copy" data-v="${GS.fmt(code)}" data-w="Code copied">${ic("copy")}Copy code</button></div>
+      <button class="link mt" data-act="soloUnsync">Stop syncing</button></div><div class="qr">${QR.svg(GS.link(code), 150)}<small>Scan with your phone</small></div></div>`;
+  const others = `<p class="small">Turn this trip into a group: friends join with a code, vote on ideas and split costs with you. Everything you planned stays.</p><button class="btn pri" data-act="inviteStart">${ic("users")}Invite people</button>`;
+  const danger = `<div class="list"><div class="item"><span class="emo">${ic("trash")}</span><div class="grow"><div class="nm">Delete this trip</div><div class="tiny muted">Removes it from this device${g.reg ? " – your other devices keep their copy" : ""}.</div></div><button class="btn sm danger" data-act="leave">Delete</button></div></div>`;
+  return head("Solo trip", "Trip & devices", `<span data-gpill-wrap>${GS.pillHTML()}</span>`)
+    + `<div class="grid g2 start">${card("Your devices", dev, { id: "invite" })}${card("The trip", trip, { b: true })}</div>
+    <div class="grid g2 start mt">${card("Travelling with others?", others, { soft: "soft" })}${card("Trip settings", danger, { tight: true })}</div>`;
+}
+
 // ------------------------------------------------------------ app settings
 function vSettings() {
   const st = A.settings;
   const look = `<div class="themes">${Object.entries(THEMES).map(([k, [a, b]]) => `<button class="${st.theme === k ? "on" : ""}" data-act="setTheme" data-v="${k}"><span class="sw"><i style="background:${a}"></i><i style="background:${b}"></i></span>${k}</button>`).join("")}</div>
     <div class="row sb mt wrap"><span>Dark mode</span><div class="seg">${[["auto", "Follow my device"], ["off", "Light"], ["on", "Dark"]].map(([v, l]) => `<button class="${st.dark === v ? "on" : ""}" data-act="setDark" data-v="${v}">${l}</button>`).join("")}</div></div>`;
   const data = `<div class="row wrap"><button class="btn" data-act="backup">${ic("down")}Download a backup</button><button class="btn" data-act="restore">${ic("up")}Restore a backup</button></div>
-    <p class="help">All your trips are saved on this device. Groups also sync, end-to-end encrypted, to everyone in the group – no account. A backup file has every trip and its photos.</p>`;
+    <p class="help">All your trips are saved on this device. Groups sync, end-to-end encrypted, to everyone in the group – solo trips only to your own devices if you turn it on. No account. A backup file has every trip and its photos.</p>`;
   return head("Make it yours", "Settings", "") + `<div class="grid g2 start">${card("Look", look)}${card("Your data", data, { b: true })}</div>
     <div class="mt">${card("About", `<p class="small">Trip Planner by TrueHaven Studios · v${esc(window.BP_VERSION || "")}</p><p class="small muted">Questions or ideas? Send me a message on Etsy – I read every one. <a href="${esc(window.BP_SHOP)}" target="_blank" rel="noopener">TrueHavenStudios</a></p><p class="tiny faint">Updates come to the same link automatically. A planning tool – check bookings with the provider.</p>`)}</div>`;
 }
@@ -1466,21 +1517,24 @@ function vWelcome() {
     <div class="pv-num" style="font-size:1.9rem">Sam pays Maya €42<small>one payment and everyone is square</small></div>`;
   return `<div class="welcome"><div class="wcol">
     <div class="wmark" aria-hidden="true">${MARK}</div><h1>Trip Planner</h1>
-    <p class="promise">Plan the trip together.<br>Split every cost. Everything offline.</p>
+    <p class="promise">Plan your trip – solo or together.<br>Split costs with friends. Everything offline.</p>
     <div class="preview" aria-hidden="true">${preview}</div>
-    <button class="btn pri big wide" data-act="createStart">Create a trip group ${ic("right")}</button>
-    <button class="btn big wide" style="margin-top:10px" data-act="joinStart">${ic("users")}Join with a code</button>
+    <button class="btn pri big wide" data-act="createStart">${ic("users")}Create a trip group ${ic("right")}</button>
+    <button class="btn big wide" style="margin-top:10px" data-act="soloStart">${ic("pin")}Plan a solo trip</button>
+    <button class="btn big wide" style="margin-top:10px" data-act="joinStart">${ic("key")}Join with a code</button>
     <div class="wlinks"><button class="link" data-act="obSample">Explore with example data</button><button class="link" data-act="restore">Restore from a backup</button></div>
     <p class="wfoot">${ic("lock")} Private – no account, end-to-end encrypted.</p></div></div>`;
 }
 function vCreate() {
   const d = OB.d, n0 = d.n || 2;
-  if (OB.step === "create1") return `<div class="ob"><div class="steps"><i class="on"></i><i></i></div><div class="caps">Step 1 of 2</div><h1 style="margin:6px 0 10px">Your trip</h1><p class="muted">Where are you going? All of it can change later.</p>
+  if (OB.step === "create1") return `<div class="ob">${d.solo ? `<div class="caps">Solo trip</div>` : `<div class="steps"><i class="on"></i><i></i></div><div class="caps">Step 1 of 2</div>`}<h1 style="margin:6px 0 10px">Your trip</h1><p class="muted">Where are you going? All of it can change later.</p>
     <div class="card pad">${field("Trip name", `<input class="inp" id="cName" value="${esc(d.name || "")}" placeholder="e.g. Lisbon with friends" autofocus>`)}
       ${field("Pick an emoji", emojiPick(d.emoji || "✈️"))}
       <div class="frow">${field("From", `<input class="inp" type="date" id="cStart" value="${esc(d.start || "")}">`)}${field("To", `<input class="inp" type="date" id="cEnd" value="${esc(d.end || "")}">`)}</div>
-      ${field("Currency for shared costs", curSel("cCur", d.cur || guessCur()), "Costs in other currencies are converted with a rate you set.")}</div>
-    <div class="row sb mt"><button class="btn" data-act="obHome">${ic("left")}Back</button><button class="btn pri" data-act="create2">Next ${ic("right")}</button></div><p class="obhint badc small" id="obErr"></p></div>`;
+      ${field(d.solo ? "Currency" : "Currency for shared costs", curSel("cCur", d.cur || guessCur()), "Costs in other currencies are converted with a rate you set.")}
+      ${d.solo ? field("Budget (optional)", `<input class="inp" id="cBud" inputmode="decimal" value="${d.budget ? esc(d.budget) : ""}" placeholder="0">`, "See what's left while you travel.") : ""}</div>
+    <div class="row sb mt"><button class="btn" data-act="obHome">${ic("left")}Back</button>${d.solo ? `<button class="btn pri" data-act="createSolo">Create my trip ${ic("right")}</button>` : `<button class="btn pri" data-act="create2">Next ${ic("right")}</button>`}</div>
+    ${d.solo ? `<p class="help" style="text-align:center">Travelling with others after all? You can invite people later – everything stays.</p>` : ""}<p class="obhint badc small" id="obErr"></p></div>`;
   const names = d.names || [];
   return `<div class="ob"><div class="steps"><i class="on"></i><i class="on"></i></div><div class="caps">Step 2 of 2</div><h1 style="margin:6px 0 10px">Who's coming?</h1><p class="muted">Add everyone now or later – people can also join with the code and pick their name.</p>
     <div class="card pad"><div class="row sb wrap"><span>How many people?</span><div class="stepper"><button class="iconbtn" data-act="cMinus" aria-label="Fewer">−</button><b class="serif" style="font-size:1.6em;min-width:30px;text-align:center">${n0}</b><button class="iconbtn" data-act="cPlus" aria-label="More">+</button></div></div>
@@ -1490,7 +1544,7 @@ function vCreate() {
 function guessCur() { try { const r = (navigator.language || "en-US").split("-")[1] || ""; return { US: "USD", GB: "GBP", CH: "CHF", CA: "CAD", AU: "AUD", NZ: "NZD", JP: "JPY", SE: "SEK", NO: "NOK", DK: "DKK", PL: "PLN" }[r] || "EUR"; } catch (e) { return "EUR"; } }
 function obCollect() {
   const d = OB.d;
-  if ($("#cName")) { d.name = val("cName"); d.start = val("cStart"); d.end = val("cEnd"); d.cur = val("cCur"); const e = $("#fEmo .on"); if (e) d.emoji = e.dataset.v; }
+  if ($("#cName")) { d.name = val("cName"); d.start = val("cStart"); d.end = val("cEnd"); d.cur = val("cCur"); if ($("#cBud")) d.budget = Math.max(0, num(val("cBud"))); const e = $("#fEmo .on"); if (e) d.emoji = e.dataset.v; }
   if (document.querySelector(".cn")) { d.names = d.names || []; document.querySelectorAll(".cn").forEach(el => d.names[+el.dataset.k] = el.value.trim()); }
 }
 function createGroup() {
@@ -1504,6 +1558,36 @@ function createGroup() {
   OB = { step: "welcome", d: {} };
   save(gid); persist(); GS.soon(gid, 50); go("group"); render();
   toast("Your group is ready – invite everyone with the link.");
+}
+// a solo trip: saved on this device only (sync with your own devices can be switched on later)
+function createSolo() {
+  const d = OB.d;
+  if (!d.name) { const e = $("#obErr"); if (e) e.textContent = "Give your trip a name."; return; }
+  if (d.start && d.end && d.end < d.start) { const e = $("#obErr"); if (e) e.textContent = "The trip ends before it starts – check the dates."; return; }
+  const gid = uid(), g = { gid, local: true, code: "", reg: false, ver: 0, me: "", dirty: false, lastSync: 0, gone: false, d: blankData() };
+  G[gid] = g; A.order.push(gid); A.active = gid;
+  const t0 = now(), id = uid();
+  g.d.info.info = { id: "info", name: d.name, emoji: d.emoji || "✈️", start: okDate(d.start) ? d.start : "", end: okDate(d.end) && d.end >= d.start ? d.end : (okDate(d.start) ? d.start : ""), cur: d.cur || "EUR", budget: d.budget || 0, rates: {}, solo: true, upd: t0 };
+  g.d.members[id] = { id, name: "Me", color: 0, n: 0, upd: t0 }; g.me = id;
+  OB = { step: "welcome", d: {} };
+  save(gid); persist(); go("trip"); render();
+  toast("Your trip is ready – start with an idea or a booking.");
+}
+// solo trip -> group: everything stays, you just get a name and a code to invite people
+function inviteModal() {
+  const nm = mem(me()).name;
+  modal("Travel with others", `<p class="muted small" style="margin-top:0">Your trip becomes a group: friends join with a code or link, vote on ideas and split costs with you. Everything you planned stays.</p>
+    ${field("Your name", `<input class="inp" id="invMe" value="${esc(nm === "Me" ? "" : nm)}" placeholder="So the others know who paid" autofocus>`)}<p class="small badc" id="invErr"></p>`,
+    `<button class="btn" data-act="close">Cancel</button><button class="btn pri" data-act="inviteGo">${ic("users")}Make it a group</button>`);
+}
+function inviteGo() {
+  const nm = val("invMe"); if (!nm) return $("#invErr").textContent = "Add your name first.";
+  const g = cur();
+  if (!me() || !D().members[me()]) { const id = uid(); put("members", { id, name: nm.slice(0, 30), color: 0, n: 0 }); g.me = id; }
+  else put("members", { ...D().members[me()], name: nm.slice(0, 30) });
+  put("info", { ...info(), id: "info", solo: false });
+  g.local = false; g.dirty = true; save(g.gid); persist(); GS.soon(g.gid, 50);
+  closeModal(); go("group"); rerender(); toast("It's a group now – share the invite link.");
 }
 function joinModal(prefill = "") {
   if (DEMO) return toast("Joining a group works in the full app.");
@@ -1525,7 +1609,10 @@ async function joinGo() {
   try {
     const r = await GS.fetchGroup(c);
     const gid = uid(); G[gid] = { gid, code: c, reg: true, ver: r.ver, me: "", dirty: false, lastSync: now(), gone: false, d: r.d };
-    A.order.push(gid); A.active = gid; save(gid); persist(); closeModal(); history.replaceState(null, "", location.pathname + location.search + "#/trip"); render(); whoAmI(true);
+    A.order.push(gid); A.active = gid;
+    const ms = members(); if (solo() && ms.length === 1) G[gid].me = ms[0].id;
+    save(gid); persist(); closeModal(); history.replaceState(null, "", location.pathname + location.search + "#/trip"); render();
+    if (G[gid].me) toast(`${esc(info().name)} is on this device now – it stays in sync.`); else whoAmI(true);
   } catch (e) { if (err) err.textContent = e.message; if (btn) { btn.disabled = false; btn.textContent = "Join group"; } }
 }
 function whoAmI(first) {
@@ -1537,16 +1624,16 @@ function whoAmI(first) {
 }
 function groupsSheet() {
   const row = gid => { const g = G[gid], i = (g.d.info || {}).info || {}, n = Object.values(g.d.members).filter(m => !m.del).length;
-    return `<button class="item opt click" data-act="switchTo" data-id="${gid}"><span class="emo big2">${esc(i.emoji || "✈️")}</span><div class="grow"><div class="nm">${esc(i.name || "Trip")}</div><div class="tiny muted">${okDate(i.start) ? dshort(i.start) + " – " + dshort(i.end) + " · " : ""}${plural(n, "person", "people")}${g.gone ? " · code changed" : ""}</div></div>${gid === A.active ? `<span class="badge ok">${ic("check")} open</span>` : ic("right")}</button>`; };
-  modal("Your trip groups", `<div class="list">${A.order.map(row).join("")}</div>`, `<button class="btn" data-act="joinStart">${ic("users")}Join a group</button><button class="btn pri" data-act="createStart">${ic("plus")}New group</button>`);
+    return `<button class="item opt click" data-act="switchTo" data-id="${gid}"><span class="emo big2">${esc(i.emoji || "✈️")}</span><div class="grow"><div class="nm">${esc(i.name || "Trip")}</div><div class="tiny muted">${okDate(i.start) ? dshort(i.start) + " – " + dshort(i.end) + " · " : ""}${i.solo ? "solo trip" : plural(n, "person", "people")}${g.gone ? " · code changed" : ""}</div></div>${gid === A.active ? `<span class="badge ok">${ic("check")} open</span>` : ic("right")}</button>`; };
+  modal("Your trips", `<div class="list">${A.order.map(row).join("")}</div>`, `<button class="btn" data-act="joinStart">${ic("key")}Join</button><button class="btn" data-act="soloStart">${ic("pin")}Solo trip</button><button class="btn pri" data-act="createStart">${ic("plus")}Group trip</button>`);
 }
 function addSheet() {
   const it = (act, icon, t, s) => `<button class="item opt click" data-act="${act}"><span class="emo">${ic(icon)}</span><div class="grow"><div class="nm">${t}</div><div class="tiny muted">${s}</div></div>${ic("right")}</button>`;
-  modal("Add", `<div class="list">${it("expAdd", "money", "Expense", "Someone paid – split it")}${it("ideaAdd", "idea", "Idea", "A place to vote on, with a photo")}${it("planAdd", "cal", "Plan", "Something on a day")}${it("walletAdd", "ticket", "Booking", "Flight, stay, ticket – offline")}${it("packGo", "bag", "Packing", "Something to bring")}</div>`);
+  modal("Add", `<div class="list">${it("expAdd", "money", "Expense", solo() ? "Something you paid" : "Someone paid – split it")}${it("ideaAdd", "idea", "Idea", solo() ? "A place you'd love to see, with a photo" : "A place to vote on, with a photo")}${it("planAdd", "cal", "Plan", "Something on a day")}${it("walletAdd", "ticket", "Booking", "Flight, stay, ticket – offline")}${it("packGo", "bag", "Packing", "Something to bring")}</div>`);
 }
 function moreSheet() {
   const it = (href, icon, t) => `<a class="item opt click" href="#/${href}" data-act="close">${`<span class="emo">${ic(icon)}</span>`}<span class="grow nm">${t}</span>${ic("right")}</a>`;
-  modal("More", `<div class="list">${it("wallet", "ticket", "Travel wallet")}${it("pack", "bag", "Packing")}${it("group", "users", "Group & invite")}${it("settings", "gear", "Settings")}</div>`);
+  modal("More", `<div class="list">${it("wallet", "ticket", "Travel wallet")}${it("pack", "bag", "Packing")}${solo() ? it("group", "devices", "Trip & devices") : it("group", "users", "Group & invite")}${it("settings", "gear", "Settings")}</div>`);
 }
 
 // ------------------------------------------------------------ expense
@@ -1555,6 +1642,8 @@ function expModal(id, o = {}) {
   const e = id ? D().exp[id] : null, i = info(), ms = members();
   if (!ms.length) return toast("Add the people in your group first.");
   EX = { mode: e ? e.mode || "equal" : "equal", split: e ? { ...(e.split || {}) } : Object.fromEntries(ms.map(m => [m.id, 1])), cat: e ? e.cat || "other" : "food", cur: e ? e.cur || i.cur : i.cur };
+  const S1 = solo();
+  if (S1) { EX.mode = "equal"; EX.split = { [me() || ms[0].id]: 1 }; }
   if (e && e.kind === "transfer") return settleModal(e);
   const body = () => {
     const amt = num($("#eAmt") ? $("#eAmt").value : (e ? e.amount : 0));
@@ -1565,9 +1654,9 @@ function expModal(id, o = {}) {
     <div class="frow">${field("Currency", curSel("eCur", EX.cur))}<div class="field" id="rateF" ${EX.cur === i.cur ? 'style="display:none"' : ""}><label>1 <span id="rCur">${esc(EX.cur)}</span> = ? ${esc(i.cur)}</label><input class="inp" id="eRate" inputmode="decimal" value="${esc(e && e.rate || (i.rates || {})[EX.cur] || "")}" placeholder="e.g. 0.92"></div></div>
     ${field("What for?", `<input class="inp" id="eTitle" value="${esc(e ? e.title : "")}" placeholder="Dinner, taxi, tickets…">`)}
     <div class="cats">${Object.entries(CATS).map(([k, [n, em]]) => `<button type="button" class="cat ${EX.cat === k ? "on" : ""}" data-act="eCat" data-v="${k}">${em} ${n}</button>`).join("")}</div>
-    <div class="frow">${field("Paid by", memberSel("ePaid", e ? e.paidBy : (me() || ms[0].id)))}${field("Date", `<input class="inp" type="date" id="eDate" value="${esc(e ? e.date : (phase().k === "during" ? today() : (info().start && today() < info().start ? today() : today())))}">`)}</div>
-    <div class="field"><label>Split</label><div class="seg">${[["equal", "Equally"], ["exact", "Exact amounts"], ["shares", "By shares"]].map(([k, l]) => `<button type="button" class="${EX.mode === k ? "on" : ""}" data-act="eMode" data-v="${k}">${l}</button>`).join("")}</div></div>
-    <div id="splitBox">${body()}</div><p class="help" id="splitHint"></p><p class="small badc" id="eErr" role="alert"></p>`,
+    <div class="frow">${S1 ? `<input type="hidden" id="ePaid" value="${esc(me() || ms[0].id)}">` : field("Paid by", memberSel("ePaid", e ? e.paidBy : (me() || ms[0].id)))}${field("Date", `<input class="inp" type="date" id="eDate" value="${esc(e ? e.date : today())}">`)}</div>
+    <div ${S1 ? 'class="hidden"' : ""}><div class="field"><label>Split</label><div class="seg">${[["equal", "Equally"], ["exact", "Exact amounts"], ["shares", "By shares"]].map(([k, l]) => `<button type="button" class="${EX.mode === k ? "on" : ""}" data-act="eMode" data-v="${k}">${l}</button>`).join("")}</div></div>
+    <div id="splitBox">${body()}</div><p class="help" id="splitHint"></p></div><p class="small badc" id="eErr" role="alert"></p>`,
     `${e ? `<button class="btn danger" data-act="expDel" data-id="${e.id}">${ic("trash")}Delete</button>` : ""}<button class="btn" data-act="close">Cancel</button><button class="btn pri" data-act="expSave" data-id="${e ? e.id : ""}">Save</button>`);
   m.querySelector("#eCur").addEventListener("change", ev => { EX.cur = ev.target.value; m.querySelector("#rateF").style.display = EX.cur === i.cur ? "none" : ""; m.querySelector("#rCur").textContent = EX.cur; const r = (i.rates || {})[EX.cur]; if (r && !val("eRate")) m.querySelector("#eRate").value = r; splitHint(); });
   m.addEventListener("input", ev => { if (ev.target.dataset.split) EX.split[ev.target.dataset.split] = ev.target.value; splitHint(); });
@@ -1592,7 +1681,7 @@ function expSave(id) {
   const rec = { id: id || uid(), title: val("eTitle").slice(0, 80) || (CATS[EX.cat] || CATS.other)[0], amount: amt, cur: c, rate, paidBy: val("ePaid"), date: val("eDate") || today(), cat: EX.cat, mode: EX.mode, split, kind: "spend", ts: id ? (D().exp[id].ts || now()) : now() };
   put("exp", rec);
   if (c !== i.cur) put("info", { ...i, id: "info", rates: { ...(i.rates || {}), [c]: rate } });
-  closeModal(); rerender(); toast(id ? "Saved." : `Added – ${esc(mem(rec.paidBy).name)} paid ${money(inTrip(rec))}.`);
+  closeModal(); rerender(); toast(id ? "Saved." : solo() ? `Added – ${money(inTrip(rec))}.` : `Added – ${esc(mem(rec.paidBy).name)} paid ${money(inTrip(rec))}.`);
 }
 function settleModal(e, pre = {}) {
   const ms = members(); if (ms.length < 2) return toast("Add a second person first.");
@@ -1618,7 +1707,7 @@ function itemModal(kind, id, pre = {}) {
     ${field(kind === "idea" ? "Place or activity" : "What", `<input class="inp" id="iTitle" value="${esc(x.title || "")}" placeholder="${kind === "idea" ? "e.g. Sunset at Miradouro" : "e.g. Lunch at Time Out Market"}" autofocus>`)}
     ${kind === "plan" ? `<div class="frow">${field("Day", `<select class="inp" id="iDate">${(td.length ? td : [x.date || today()]).map(d => opt(d, dlong(d), x.date || pre.date || td[0])).join("")}${x.date && !td.includes(x.date) ? opt(x.date, dlong(x.date), x.date) : ""}</select>`)}${field("Time", `<input class="inp" type="time" id="iTime" value="${esc(x.time || "")}">`)}</div>` : ""}
     ${field("Where", `<input class="inp" id="iPlace" value="${esc(x.place || "")}" placeholder="Address or name – opens in Maps">`)}
-    <div class="frow">${field("Cost", `<input class="inp" id="iCost" inputmode="decimal" value="${x.cost ? esc(x.cost) : ""}" placeholder="0">`)}${field("Counts", `<select class="inp" id="iPer">${opt("person", "per person", x.per || "person")}${opt("group", "for the whole group", x.per)}</select>`)}</div>
+    <div class="frow">${field("Cost", `<input class="inp" id="iCost" inputmode="decimal" value="${x.cost ? esc(x.cost) : ""}" placeholder="0">`)}${solo() ? `<input type="hidden" id="iPer" value="person">` : field("Counts", `<select class="inp" id="iPer">${opt("person", "per person", x.per || "person")}${opt("group", "for the whole group", x.per)}</select>`)}</div>
     ${field("Currency", curSel("iCur", x.ccur || i.cur))}
     ${photoField(PH.id)}
     ${field("Link", `<input class="inp" id="iLink" value="${esc(x.link || "")}" placeholder="Website, booking or review (optional)">`)}
@@ -1643,7 +1732,7 @@ async function itemSave(kind, id, from) {
   if (kind === "plan") { rec.date = val("iDate"); rec.time = val("iTime"); if (from) rec.idea = from; }
   put(col, rec);
   if (kind === "plan" && from && D().ideas[from]) put("ideas", { ...D().ideas[from], planned: rec.date });
-  closeModal(); rerender(); toast(kind === "idea" ? (id ? "Saved." : "Added – the group can vote now.") : "Added to " + dlong(rec.date) + ".");
+  closeModal(); rerender(); toast(kind === "idea" ? (id ? "Saved." : solo() ? "Added to your ideas." : "Added – the group can vote now.") : "Added to " + dlong(rec.date) + ".");
 }
 function ideaToPlan(id) {
   const x = D().ideas[id]; if (!x) return;
@@ -1683,7 +1772,7 @@ function tripModal() {
   const i = info();
   modal("The trip", `${field("Trip name", `<input class="inp" id="tName" value="${esc(i.name)}">`)}${field("Emoji", emojiPick(i.emoji))}
     <div class="frow">${field("From", `<input class="inp" type="date" id="tStart" value="${esc(i.start || "")}">`)}${field("To", `<input class="inp" type="date" id="tEnd" value="${esc(i.end || "")}">`)}</div>
-    <div class="frow">${field("Currency", curSel("tCur", i.cur), spends().length ? "Changing it doesn't convert expenses already saved." : "")}${field("Budget per person (optional)", `<input class="inp" id="tBud" inputmode="decimal" value="${i.budget || ""}">`)}</div><p class="small badc" id="tErr"></p>`,
+    <div class="frow">${field("Currency", curSel("tCur", i.cur), spends().length ? "Changing it doesn't convert expenses already saved." : "")}${field(solo() ? "Budget (optional)" : "Budget per person (optional)", `<input class="inp" id="tBud" inputmode="decimal" value="${i.budget || ""}">`)}</div><p class="small badc" id="tErr"></p>`,
     `<button class="btn" data-act="close">Cancel</button><button class="btn pri" data-act="tripSave">Save</button>`);
 }
 function viewPhoto(pid) { const p = photo(pid); if (!p) return; const el = document.createElement("div"); el.className = "pview"; el.innerHTML = `<img src="${p}" alt=""><button class="iconbtn" aria-label="Close">${ic("x")}</button>`; el.onclick = () => el.remove(); document.body.appendChild(el); }
@@ -1721,6 +1810,12 @@ const ACT = {
   // onboarding
   obHome: () => { OB = { step: "welcome", d: {} }; if (!A.active) A.active = (G[A.active_before] ? A.active_before : A.order[0]) || ""; go("trip"); render(); },
   createStart: () => { if (DEMO) return demoNo("Creating groups"); closeModal(); OB = { step: "create1", d: { n: 2, cur: guessCur(), emoji: "✈️" } }; A.active_before = A.active; A.active = ""; render(); scrollTo(0, 0); },
+  soloStart: () => { if (DEMO) return demoNo("Creating trips"); closeModal(); OB = { step: "create1", d: { solo: true, n: 1, cur: guessCur(), emoji: "✈️" } }; A.active_before = A.active; A.active = ""; render(); scrollTo(0, 0); },
+  createSolo: () => { obCollect(); createSolo(); },
+  inviteStart: () => { if (DEMO) return demoNo("Inviting people"); inviteModal(); }, inviteGo: () => inviteGo(),
+  soloSync: () => { if (DEMO) return demoNo("Sync"); const g = cur(); if (!GS.enabled()) return toast("Sync isn't switched on in this copy."); g.local = false; g.dirty = true; save(g.gid); persist(); GS.soon(g.gid, 30); rerender(); toast("Sync is on – your code appears in a moment."); },
+  soloUnsync: () => modal("Stop syncing?", `<p>The synced copy is erased and the trip stays only on this device. Your other devices keep the copy they have, but it stops updating.</p>`, `<button class="btn" data-act="close">Cancel</button><button class="btn danger" data-act="soloUnsyncGo">Stop syncing</button>`),
+  soloUnsyncGo: async () => { const g = cur(); try { if (g.reg) await GS.removeForAll(g); } catch (e) { return toast(esc(e.message)); } Object.assign(g, { local: true, reg: false, code: "", ver: 0, dirty: false, gone: false }); save(g.gid); persist(); closeModal(); rerender(); toast("This trip is only on this device now."); },
   create1: () => { obCollect(); OB.step = "create1"; render(); },
   create2: () => { obCollect(); if (!OB.d.name) { $("#obErr").textContent = "Give your trip a name."; return; } if (OB.d.start && OB.d.end && OB.d.end < OB.d.start) { $("#obErr").textContent = "The trip ends before it starts – check the dates."; return; } OB.step = "create2"; render(); scrollTo(0, 0); },
   cPlus: () => { obCollect(); OB.d.n = Math.min(20, (OB.d.n || 2) + 1); render(); }, cMinus: () => { obCollect(); OB.d.n = Math.max(1, (OB.d.n || 2) - 1); render(); },
@@ -1788,8 +1883,9 @@ const ACT = {
     if (navigator.share) navigator.share({ title: info().name, text: t }).catch(() => { }); else copyText(t, "Invite copied"); },
   rotate: () => modal("Make a new code?", `<p>The current code and link stop working right away. Everyone already in the group needs the new link to keep syncing.</p>`, `<button class="btn" data-act="close">Cancel</button><button class="btn pri" data-act="rotateGo">Make a new code</button>`),
   rotateGo: async () => { const b = $(".modal [data-act=rotateGo]"); if (b) { b.disabled = true; b.textContent = "Making a new code…"; } try { await GS.rotate(cur()); closeModal(); rerender(); toast("New code ready – share the new link."); } catch (e) { closeModal(); toast(esc(e.message || "Couldn't make a new code – are you online?")); } },
-  leave: () => modal("Leave this group?", `<p>The trip is removed from this device. The others keep it, and you can join again with the code.</p>`, `<button class="btn" data-act="close">Cancel</button><button class="btn danger" data-act="leaveGo">Leave</button>`),
-  leaveGo: () => { removeLocal(A.active); closeModal(); toast("You left the group."); },
+  leave: () => solo() ? modal("Delete this trip?", `<p><b>${esc(info().name)}</b> is removed from this device${cur().reg ? " – your other devices keep their copy" : ". This can't be undone – download a backup first if you want to keep it"}.</p>`, `<button class="btn" data-act="close">Cancel</button><button class="btn danger" data-act="leaveGo">Delete</button>`)
+    : modal("Leave this group?", `<p>The trip is removed from this device. The others keep it, and you can join again with the code.</p>`, `<button class="btn" data-act="close">Cancel</button><button class="btn danger" data-act="leaveGo">Leave</button>`),
+  leaveGo: () => { const s = solo(); removeLocal(A.active); closeModal(); toast(s ? "Trip deleted from this device." : "You left the group."); },
   killAll: () => modal("Delete for everyone?", `<p>This erases the shared copy of <b>${esc(info().name)}</b>. Everyone's app stops syncing it, and it's removed from this device. This can't be undone.</p>`, `<button class="btn" data-act="close">Cancel</button><button class="btn danger" data-act="killGo">Delete for everyone</button>`),
   killGo: async () => { try { await GS.removeForAll(cur()); removeLocal(A.active); closeModal(); toast("Deleted for everyone."); } catch (e) { toast(esc(e.message)); } },
   // settings
