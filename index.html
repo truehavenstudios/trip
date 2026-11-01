@@ -557,6 +557,19 @@ html[data-dark="1"] .thumb.ph,html[data-dark="1"] .iimg.ph{background:linear-gra
 .vote.on{background:var(--a);border-color:var(--a);color:#fff}
 /* money */
 .bals{display:flex;flex-direction:column;gap:10px}
+.bk{display:inline-flex;align-items:center;gap:3px;font-size:.66em;font-weight:500;letter-spacing:.04em;text-transform:uppercase;border-radius:20px;padding:2px 8px;background:color-mix(in srgb,var(--warn,#C9822F) 16%,var(--card));color:var(--warn,#9a6224);vertical-align:2px}.bk.ok{background:color-mix(in srgb,var(--ok,#4C7A5A) 15%,var(--card));color:var(--ok,#3f6b4c)}.bk svg{width:11px;height:11px}
+.bookchk{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:6px;cursor:pointer}.bookchk input{width:22px;height:22px;accent-color:var(--a)}.bookchk span{display:flex;flex-direction:column}.bookchk small{color:var(--ink2);font-size:.8em}
+.bstrip{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;background:var(--card);border-radius:16px;padding:12px 16px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid color-mix(in srgb,var(--line) 70%,transparent)}.bstrip small{display:block;color:var(--ink2);font-size:.8em;margin-top:2px}.bstrip svg{width:18px;height:18px;color:var(--ink2)}
+.bprog{width:90px;height:8px;border-radius:8px;background:var(--bg2);overflow:hidden;flex:none}.bprog i{display:block;height:100%;background:var(--a);border-radius:8px}
+.btick{flex:none;width:28px;height:28px;border-radius:9px;border:1.5px solid var(--line2,#cfc6bd);background:var(--card);display:grid;place-items:center;color:transparent;cursor:pointer}.btick svg{width:16px;height:16px}.btick.on{background:var(--a);border-color:var(--a);color:#fff}.bkseg{display:flex;width:100%}.bkseg button{flex:1}.bkamt{text-align:right;line-height:1.15}.bkamt small{display:block;font-size:.72em;color:var(--ink2)}.brk.paid .nm{text-decoration:line-through;opacity:.6}
+.tile .of{font-size:.5em;color:var(--ink2)}
+.bstack{display:flex;height:12px;border-radius:8px;overflow:hidden;background:var(--bg2);margin-top:12px}.bstack i{display:block;height:100%}.bstack .b1,.hleg .b1{background:var(--a)}.bstack .b2,.hleg .b2{background:color-mix(in srgb,var(--a) 40%,var(--bg2))}.hleg .b3{background:var(--bg2);border:1px solid var(--line)}
+.hleg{display:flex;gap:16px;flex-wrap:wrap;font-size:.78em;color:var(--ink2);margin-top:8px}.hleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.setc .band .t{display:flex;align-items:center;gap:8px}.setc .band svg{width:16px;height:16px}
+.slist{display:flex;flex-direction:column;gap:10px}.srow{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:16px;background:var(--bg2)}.srow.mine{background:color-mix(in srgb,var(--bad,#B4574B) 10%,var(--card));box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--bad,#B4574B) 35%,transparent)}.srow.tome{background:color-mix(in srgb,var(--ok,#4C7A5A) 10%,var(--card))}
+.sarrow{flex:1;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap;min-width:0}.sarrow span{color:var(--ink2);font-size:.85em}.samt{font-family:var(--serif);font-size:1.35em;white-space:nowrap}
+.otbl{display:flex;flex-direction:column;font-size:.92em}.otbl .oh,.otbl .orow{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.3fr;gap:8px;align-items:center;padding:9px 4px}.otbl .oh{font-size:.68em;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);border-bottom:2px solid var(--line)}.otbl .orow{border-bottom:1px solid var(--line)}.otbl .orow.me{background:color-mix(in srgb,var(--a) 6%,transparent)}.otbl .on2{display:flex;align-items:center;gap:8px;min-width:0}.otbl small{color:var(--ink2)}
+@media(max-width:620px){.otbl .oh,.otbl .orow{grid-template-columns:1.3fr .9fr .9fr 1.3fr;font-size:.88em}.srow{flex-wrap:wrap;row-gap:8px}.srow .sto{display:none}.sarrow{flex:1 1 calc(100% - 50px);white-space:nowrap}.samt{margin-right:auto;font-size:1.2em}}
 .brow{display:flex;align-items:center;gap:10px}
 .brow .bn{width:96px;font-size:.9em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none}
 .bbar{flex:1;height:12px;position:relative;background:var(--bg2);border-radius:8px}
@@ -628,7 +641,7 @@ input[type=date].inp,input[type=time].inp{min-width:0;width:100%;-webkit-appeara
 .invite>div:first-child{flex:1 1 260px;min-width:0}
 </style></head>
 <body data-theme="Ocean"><div id="root"></div>
-<script>window.BP_DEMO=true;window.BP_SHOP="https://www.etsy.com/shop/TrueHavenStudios";window.BP_VERSION="1.1.0";window.BP_SYNC_URL="https://truehaven-sync.fishing-switzerland.workers.dev";</script>
+<script>window.BP_DEMO=true;window.BP_SHOP="https://www.etsy.com/shop/TrueHavenStudios";window.BP_VERSION="1.2.0";window.BP_SYNC_URL="https://truehaven-sync.fishing-switzerland.workers.dev";</script>
 <script>const te = new TextEncoder();
   const QR = (() => {
     const ECC = [-1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26];
@@ -734,6 +747,7 @@ window.BP_SAMPLE = function () {
   P("p11", 1, "10:30", "Pena Palace", "Palácio da Pena, Sintra", 20, 0, "Timed tickets for 10:30", "🏰");
   P("p12", 2, "09:00", "Surf lesson in Carcavelos", "Carcavelos Beach", 60, 0, "Maya & Jonas", "🏄");
   P("p13", 3, "11:15", "Fly home", "Lisbon Airport", 0, 0, "", "✈️");
+  ["p1", "p2", "p9", "p11", "p12", "p13"].forEach((i, k) => { d.plan[i].bk = "done"; d.plan[i].bookedBy = ["m1", "m2", "m1", "m3", "m4", "m1"][k]; }); ["p3", "p5", "p10"].forEach(i => d.plan[i].bk = "todo");
   const I = (id, title, place, cost, per, note, emoji, planned) => d.ideas[id] = { id, title, place, cost, per: per || "person", ccur: "EUR", crate: 1, note, emoji, planned: planned || "", upd: u(), by: ["m1", "m2", "m3", "m4"][id.length % 4] };
   I("i1", "Sunset at Miradouro da Senhora do Monte", "Miradouro da Senhora do Monte", 0, 0, "Best view over the city – bring drinks", "🌇");
   I("i2", "Day trip to Cascais", "Cascais", 12, 0, "Train along the coast, beach + old town", "🏖️");
@@ -941,7 +955,7 @@ const val = id => { const e = document.getElementById(id); return e ? e.value.tr
 function copyText(t, what = "Copied") { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast(what + " ✓"), () => { const a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); toast(what + " ✓"); } catch (e) { } a.remove(); }); }
 
 // ------------------------------------------------------------ router
-const ROUTES = ["trip", "plan", "ideas", "money", "wallet", "pack", "group", "settings"];
+const ROUTES = ["trip", "plan", "book", "ideas", "money", "wallet", "pack", "group", "settings"];
 function route() { const r = (location.hash || "").replace(/^#\/?/, "").split("?")[0]; return ROUTES.includes(r) ? r : "trip"; }
 function go(r) { if (location.hash !== "#/" + r) location.hash = "#/" + r; }
 
@@ -1261,7 +1275,7 @@ const tile = (h, v, s = "", cls = "") => `<div class="tile"><div class="h">${h}<
 function head(kicker, title, acts = "") {
   return `<div class="topbar"><div><div class="caps">${kicker}</div><h1>${title}</h1></div><div class="acts">${acts}</div></div>`;
 }
-const NAV = [["trip", "Overview", "home"], ["plan", "Plan", "cal"], ["ideas", "Ideas", "idea"], ["money", "Money", "money"], ["wallet", "Wallet", "ticket"], ["pack", "Packing", "bag"], ["group", "Group", "users"]];
+const NAV = [["trip", "Overview", "home"], ["plan", "Itinerary", "cal"], ["book", "Book & budget", "check"], ["ideas", "Ideas", "idea"], ["money", "Money", "money"], ["wallet", "Wallet", "ticket"], ["pack", "Packing", "bag"], ["group", "Group", "users"]];
 function switcher(cls = "") {
   const i = info(), ms = members();
   return `<button class="gswitch ${cls}" data-act="groups" aria-label="Switch trip"><span class="gemo">${esc(i.emoji || "✈️")}</span><span class="gnm"><b>${esc(i.name || "Trip")}</b><small>${i.solo ? "Solo trip" : plural(ms.length, "person", "people")}${A.order.length > 1 ? " · " + A.order.length + " trips" : ""}</small></span>${ic("down2")}</button>`;
@@ -1279,7 +1293,7 @@ function shell(content) {
     <a class="nav ${r === "settings" ? "on" : ""}" href="#/settings">${ic("gear")}<span>Settings</span></a>
     <div class="sidefoot">${GS.pillHTML()}<div class="tiny faint">v${esc(window.BP_VERSION || "")}</div></div></aside>
     <main class="main" id="main"><div class="mtop">${switcher("m")}${GS.pillHTML()}<a class="iconbtn" href="#/settings" aria-label="Settings">${ic("gear")}</a></div>${banners()}${content}${DEMO ? footer() : ""}</main></div>
-    <nav class="tabbar">${tab("trip", "Trip", "home")}${tab("plan", "Plan", "cal")}${tab("ideas", "Ideas", "idea")}<button class="fab" data-act="addSheet" aria-label="Add">${ic("plus")}</button>${tab("money", "Money", "money")}<button data-act="moreSheet" class="${["wallet", "pack", "group", "settings"].includes(r) ? "on" : ""}">${ic("more")}More</button></nav>`;
+    <nav class="tabbar">${tab("trip", "Trip", "home")}${tab("plan", "Itinerary", "cal")}${tab("ideas", "Ideas", "idea")}<button class="fab" data-act="addSheet" aria-label="Add">${ic("plus")}</button>${tab("money", "Money", "money")}<button data-act="moreSheet" class="${["book", "wallet", "pack", "group", "settings"].includes(r) ? "on" : ""}">${ic("more")}More</button></nav>`;
 }
 function footer() {
   return `<footer class="sitefoot"><b>Trip Planner by TrueHaven Studios</b> – a group travel planner app for phone and computer: plan the days together, vote on places, split costs and see who owes whom, and keep every booking offline in one travel wallet. Groups sync with a code, end-to-end encrypted, no account. <a href="${esc(window.BP_SHOP)}" target="_blank" rel="noopener">TrueHaven Studios on Etsy</a></footer>`;
@@ -1338,18 +1352,48 @@ const stRow = t => `<div class="item st">${av(mem(t.from))}<span class="small gr
 function costLine(x) { const c = num(x.cost); if (!c) return x.place ? esc(x.place) : "No cost"; const pp = costPP(x); return `${money(pp, undefined, pp >= 100)}${solo() ? "" : " per person"}${x.place ? " · " + esc(x.place) : ""}`; }
 function thumb(x, cls = "") { const p = photo(x.photo); return p ? `<img class="thumb ${cls}" src="${p}" alt="" data-act="viewPhoto" data-id="${x.photo}">` : `<span class="thumb ${cls} ph" style="--h:${(x.title || "").length * 37 % 360}">${esc(x.emoji || "📍")}</span>`; }
 function planRow(p) {
-  return `<div class="item click prow" data-act="planEdit" data-id="${p.id}"><span class="ptime">${p.time ? esc(p.time) : "–"}</span>${thumb(p, "sm")}<div class="grow"><div class="nm">${esc(p.title)}</div><div class="tiny muted">${costLine(p)}${p.note ? " · " + esc(p.note).slice(0, 80) : ""}</div></div>${p.place ? `<a class="iconbtn" href="${mapsLink(p.place)}" target="_blank" rel="noopener" data-stop="1" aria-label="Open in Maps">${ic("pin")}</a>` : ""}</div>`;
+  return `<div class="item click prow" data-act="planEdit" data-id="${p.id}"><span class="ptime">${p.time ? esc(p.time) : "–"}</span>${thumb(p, "sm")}<div class="grow"><div class="nm">${esc(p.title)}${needsBook(p) ? (isBooked(p) ? ` <span class="bk ok">${ic("check")}booked</span>` : ` <span class="bk">to book</span>`) : ""}</div><div class="tiny muted">${costLine(p)}${p.note ? " · " + esc(p.note).slice(0, 80) : ""}</div></div>${p.place ? `<a class="iconbtn" href="${mapsLink(p.place)}" target="_blank" rel="noopener" data-stop="1" aria-label="Open in Maps">${ic("pin")}</a>` : ""}</div>`;
 }
 function vPlan() {
   const td = tripDays(), others = planItems().filter(p => !td.includes(p.date)).sort((a, b) => a.date.localeCompare(b.date));
   const idle = ideas().filter(x => !x.planned).length;
   const day = (d, k) => { const it = dayItems(d), c = r2(it.reduce((a, p) => a + costPP(p), 0));
     return `<section class="card dayc ${d === today() ? "now" : ""}"><div class="band ${k % 2 ? "b" : ""}"><span class="t">Day ${k + 1} · ${dlong(d)}</span><span class="r">${c ? money(c, undefined, true) + (solo() ? "" : " pp") : ""}<button class="lnk" data-act="planAdd" data-d="${d}">+ Add</button></span></div>
-    <div class="body tight">${it.length ? `<div class="list">${it.map(planRow).join("")}</div>` : `<p class="muted small" style="margin:8px 0">Free day – or <button class="link" data-act="planAdd" data-d="${d}">add a plan</button>${idle ? ` or <a class="link" href="#/ideas">pick from ${plural(idle, "idea")}</a>` : ""}.</p>`}</div></section>`; };
-  return head("Day by day", "Plan", `<button class="btn" data-act="tripEdit">${ic("cal")}Dates</button><button class="btn pri" data-act="planAdd">${ic("plus")}Add a plan</button>`)
-    + `<div class="tots t3 mb"><div><b>${td.length}</b><span>days</span></div><div><b>${planItems().length}</b><span>plans</span></div><div><b>${money(planPP(), undefined, true)}</b><span>${solo() ? "planned" : "planned per person"}</span></div></div>`
+    <div class="body tight">${it.length ? `<div class="list">${it.map(planRow).join("")}</div>` : `<p class="muted small" style="margin:8px 0">Free day – or <button class="link" data-act="planAdd" data-d="${d}">add something</button>${idle ? ` or <a class="link" href="#/ideas">pick from ${plural(idle, "idea")}</a>` : ""}.</p>`}</div></section>`; };
+  return head("Day by day", "Itinerary", `<button class="btn" data-act="tripEdit">${ic("cal")}Dates</button><a class="btn" href="#/book">${ic("check")}Book & budget</a><button class="btn pri" data-act="planAdd">${ic("plus")}Add to itinerary</button>`)
+    + `<div class="tots t3 mb"><div><b>${td.length}</b><span>days</span></div><div><b>${planItems().length}</b><span>plans</span></div><div><b>${money(planPP(), undefined, true)}</b><span>${solo() ? "planned" : "planned per person"}</span></div></div>` + bookStrip()
     + (td.length ? `<div class="days">${td.map(day).join("")}</div>` : `<div class="empty">Set your travel dates to see every day. <button class="btn sm" data-act="tripEdit">Set dates</button></div>`)
     + (others.length ? `<h2 class="sec">Outside your dates</h2><div class="card pad"><div class="list">${others.map(p => `<div class="dayhead">${dlong(p.date)}</div>` + planRow(p)).join("")}</div></div>` : "");
+}
+
+// ------------------------------------------------------------ book & budget: what still needs booking, what it costs
+const bkOf = p => p.bk === "todo" || p.bk === "done" ? p.bk : p.bk === undefined && p.link ? "todo" : "none";
+const needsBook = p => bkOf(p) !== "none", isBooked = p => bkOf(p) === "done";
+const costAll = p => costPP(p) * (solo() ? 1 : n());
+function bookStrip() {
+  const it = planItems().filter(needsBook); if (!it.length) return "";
+  const done = it.filter(isBooked).length;
+  return `<a class="bstrip" href="#/book"><span class="grow"><b>${done} of ${it.length} booked</b><small>${done === it.length ? "everything with a ticket or reservation is done" : plural(it.length - done, "thing") + " still to book · " + money(r2(it.filter(p => !isBooked(p)).reduce((a, p) => a + costPP(p), 0)), undefined, true) + (solo() ? "" : " per person")}</small></span><span class="bprog"><i style="width:${done / it.length * 100}%"></i></span>${ic("right")}</a>`;
+}
+let BF = "todo";
+function vBook() {
+  const all = planItems().filter(needsBook).sort((a, b) => (a.date + (a.time || "99")).localeCompare(b.date + (b.time || "99"))), i = info(), S1 = solo(), N = S1 ? 1 : n();
+  const todo = all.filter(p => !isBooked(p)), done = all.filter(isBooked), free = planItems().length - all.length;
+  const sum = (l, f) => r2(l.reduce((a, p) => a + f(p), 0));
+  const planPPv = planPP(), bookedPP = sum(done, costPP), todoPP = sum(todo, costPP), spentPP = S1 ? totalSpent() : myShare(me());
+  const budget = i.budget || 0, after = r2(budget - planPPv);
+  const tiles = `<div class="tiles t4">${tile(S1 ? "Planned" : "Planned per person", money(planPPv, undefined, true), S1 ? plural(planItems().length, "item") : "group " + money(r2(planPPv * N), undefined, true))}${tile("Booked", `${done.length}<small class="of"> / ${all.length}</small>`, money(bookedPP, undefined, true) + (S1 ? "" : " pp"), done.length === all.length && all.length ? "ok" : "")}${tile("Still to book", money(todoPP, undefined, true), todo.length ? plural(todo.length, "thing") + (S1 ? "" : " · per person") : "all done", todo.length ? "" : "ok")}${tile(budget ? (after < 0 ? "Over budget" : "Left after plan") : "Budget", budget ? money(Math.abs(after), undefined, true) : "–", budget ? (S1 ? "" : "per person · ") + "budget " + money(budget, undefined, true) : `<button class="link" data-act="tripEdit">Set a budget</button>`, budget ? (after < 0 ? "bad" : "ok") : "")}</div>`;
+  const row = p => `<div class="item brk ${isBooked(p) ? "paid" : ""}"><button class="btick ${isBooked(p) ? "on" : ""}" data-act="bookTog" data-id="${p.id}" aria-label="Booked">${ic("check")}</button><div class="grow click" data-act="planEdit" data-id="${p.id}"><div class="nm">${esc(p.title)}</div><div class="tiny muted">${dshort(p.date)}${p.time ? " · " + esc(p.time) : ""}${isBooked(p) && p.bookedBy && !S1 ? " · booked by " + esc(mem(p.bookedBy).name) : ""}</div></div>
+    <div class="bkamt"><b>${money(costPP(p), undefined, costPP(p) >= 100)}</b>${S1 ? "" : `<small>${p.per === "group" ? money(num(p.cost) * (p.ccur && p.ccur !== i.cur ? num(p.crate) || 1 : 1), undefined, true) + " total" : money(costAll(p), undefined, true) + " for all"}</small>`}</div>
+    ${p.link && !isBooked(p) ? `<a class="btn sm" href="${esc(p.link)}" target="_blank" rel="noopener">Book</a>` : isBooked(p) ? `<button class="iconbtn" data-act="bookWallet" data-id="${p.id}" title="Add the ticket to the wallet" aria-label="Add to wallet">${ic("ticket")}</button>` : ""}</div>`;
+  const list = BF === "todo" ? todo : BF === "done" ? done : all;
+  const pct = all.length ? done.length / all.length : 0;
+  return head("Plan · book · budget", "Book & budget", `<a class="btn" href="#/plan">${ic("cal")}Itinerary</a><button class="btn pri" data-act="planAdd">${ic("plus")}Add to itinerary</button>`)
+    + tiles
+    + `<div class="card pad mt"><div class="row sb wrap"><b>${done.length} of ${all.length} booked</b><span class="tiny muted">${free ? plural(free, "free item") + " in your itinerary need no booking" : ""}</span></div><div class="bar thick a" style="margin:10px 0 4px"><i style="width:${pct * 100}%"></i></div>
+      ${budget ? `<div class="bstack"><i class="b1" style="width:${Math.min(100, bookedPP / Math.max(budget, planPPv) * 100)}%"></i><i class="b2" style="width:${Math.min(100, todoPP / Math.max(budget, planPPv) * 100)}%"></i>${spentPP > 0 ? "" : ""}</div><div class="hleg"><span><i class="b1"></i>booked ${money(bookedPP, undefined, true)}</span><span><i class="b2"></i>to book ${money(todoPP, undefined, true)}</span><span><i class="b3"></i>${after >= 0 ? "free in budget " + money(after, undefined, true) : "over budget " + money(-after, undefined, true)}</span></div>` : ""}</div>`
+    + `<div class="row sb wrap mt mb"><div class="seg">${[["todo", "To book · " + todo.length], ["done", "Booked · " + done.length], ["all", "All"]].map(([k, l]) => `<button class="${BF === k ? "on" : ""}" data-act="bookFilter" data-v="${k}">${l}</button>`).join("")}</div><span class="tiny muted">Tick it when it's booked${S1 ? "" : " – everyone sees it"}</span></div>`
+    + (list.length ? `<div class="card"><div class="body tight"><div class="list">${list.map(row).join("")}</div></div></div>` : `<div class="empty">${all.length ? (BF === "todo" ? "Everything is booked. 🎉" : "Nothing booked yet.") : "Add things with a cost or a booking link to your itinerary – they show up here to book."}</div>`);
 }
 
 // ------------------------------------------------------------ ideas
@@ -1363,7 +1407,7 @@ function vIdeas() {
       ${x.note ? `<p class="small muted inote">${esc(x.note)}</p>` : ""}
       <div class="row sb wrap ifoot"><span class="avs sm">${solo() ? "" : `${vs.map(m => av(m, "xs")).join("")}<span class="tiny faint">${vs.length ? (vs.length === ms.length ? "everyone" : vs.length + " of " + ms.length) : "no votes yet"}</span>`}</span>
       <span class="row">${x.link ? `<a class="iconbtn" href="${esc(x.link)}" target="_blank" rel="noopener" aria-label="Open link">${ic("link")}</a>` : ""}${x.place ? `<a class="iconbtn" href="${mapsLink(x.place)}" target="_blank" rel="noopener" aria-label="Maps">${ic("pin")}</a>` : ""}<button class="iconbtn" data-act="ideaEdit" data-id="${x.id}" aria-label="Edit">${ic("edit")}</button>
-      ${x.planned ? `<span class="badge ok">${ic("check")} ${dshort(x.planned)}</span>` : `<button class="btn sm pri" data-act="ideaPlan" data-id="${x.id}">Add to plan</button>`}</span></div></div></article>`; };
+      ${x.planned ? `<span class="badge ok">${ic("check")} ${dshort(x.planned)}</span>` : `<button class="btn sm pri" data-act="ideaPlan" data-id="${x.id}">Add to itinerary</button>`}</span></div></div></article>`; };
   return head("Places you want to go", "Ideas", `<button class="btn pri" data-act="ideaAdd">${ic("plus")}${solo() ? "Add a place" : "Suggest a place"}</button>`)
     + `<div class="row sb wrap mb"><div class="seg">${[["open", "Not planned"], ["planned", "Planned"], ["all", "All"]].map(([k, l]) => `<button class="${IF === k ? "on" : ""}" data-act="ideaFilter" data-v="${k}">${l}</button>`).join("")}</div><span class="tiny muted">${solo() ? "Newest first" : "Most votes first"} · photos ${Math.round(photoBytes() / PHOTO_BUDGET * 100)}% of trip space</span></div>`
     + (list.length ? `<div class="igrid">${list.map(cardI).join("")}</div>` : `<div class="empty">${all.length ? "Nothing here." : solo() ? "Collect places you'd love to see – with a photo, the cost and a link. Add the best ones to your plan." : "Collect places you'd love to see – with a photo, the cost and a link. Everyone votes, the winners go into the plan."}<br><button class="btn sm mt" data-act="ideaAdd">${ic("plus")}${solo() ? "Add a place" : "Suggest a place"}</button></div>`);
@@ -1374,6 +1418,10 @@ function vMoney() {
   if (solo()) return vMoneySolo();
   const ms = members(), b = balances(), st = settle(), i = info(), tot = totalSpent(), my = b[me()] || 0, ex = expenses();
   const tiles = `<div class="tiles t4">${tile("Spent together", money(tot, undefined, true), plural(spends().length, "expense"))}${tile("Your share", money(myShare(me()), undefined, true), i.budget ? "budget " + money(i.budget, undefined, true) : "")}${tile("You paid", money(paidBy(me()), undefined, true), "")}${tile("Your balance", money(Math.abs(my)), my > 0.004 ? "you're owed" : my < -0.004 ? "you owe" : "all square", my > 0.004 ? "ok" : my < -0.004 ? "bad" : "")}</div>`;
+  const owTable = `<div class="otbl"><div class="oh"><span>Person</span><span>Paid</span><span>Share</span><span>Balance</span></div>${ms.map(m => { const v = b[m.id] || 0; return `<div class="orow ${m.id === me() ? "me" : ""}"><span class="on2">${av(m, "xs")}${esc(m.name)}${m.id === me() ? " <small>(you)</small>" : ""}</span><span>${money(paidBy(m.id), undefined, true)}</span><span>${money(myShare(m.id), undefined, true)}</span><span class="${v < -0.004 ? "badc" : v > 0.004 ? "okc" : "muted"}"><b>${v > 0.004 ? "gets " + money(v) : v < -0.004 ? "owes " + money(-v) : "square"}</b></span></div>`; }).join("")}</div>`;
+  const settleCard = `<section class="card setc mt"><div class="band"><span class="t">${ic("swap")} Settle up</span><span class="r">${st.length ? plural(st.length, "payment") + " and everyone is square" : "all square"}</span></div><div class="body">
+    ${st.length ? `<div class="slist">${st.map(t => `<div class="srow ${t.from === me() ? "mine" : t.to === me() ? "tome" : ""}">${av(mem(t.from))}<span class="sarrow"><b>${esc(mem(t.from).name)}${t.from === me() ? " (you)" : ""}</b><span>pays</span><b>${esc(mem(t.to).name)}${t.to === me() ? " (you)" : ""}</b></span><span class="sto">${av(mem(t.to))}</span><span class="samt">${money(t.amount)}</span><button class="btn sm ${t.from === me() ? "pri" : ""}" data-act="settleOne" data-f="${t.from}" data-t="${t.to}" data-a="${t.amount}">Mark paid</button></div>`).join("")}</div>` : `<p class="okc" style="margin:0">${ic("check")} Everyone is square – nobody owes anything.</p>`}
+    <h3 class="sub3">Who owes what</h3>${owTable}<p class="help">Balance = what someone paid minus their share. The app finds the fewest payments to settle up.</p></div></section>`;
   const maxB = Math.max(1, ...Object.values(b).map(Math.abs));
   const balBody = `<div class="bals">${ms.map(m => { const v = b[m.id] || 0; return `<div class="brow">${av(m)}<span class="bn">${esc(m.name)}${m.id === me() ? " (you)" : ""}</span><div class="bbar"><i class="${v < 0 ? "neg" : "pos"}" style="${v < 0 ? "right:50%" : "left:50%"};width:${Math.abs(v) / maxB * 50}%"></i></div><span class="amt ${v < -0.004 ? "badc" : v > 0.004 ? "okc" : "muted"}">${v > 0.004 ? "+" : v < -0.004 ? "−" : ""}${money(Math.abs(v))}</span></div>`; }).join("")}</div>
     ${st.length ? `<h3 class="sub3">Fewest payments to settle up</h3><div class="list">${st.map(stRow).join("")}</div>` : `<p class="okc small mt">${ic("check")} Everyone is square.</p>`}`;
@@ -1385,8 +1433,8 @@ function vMoney() {
   const groups = {}; ex.forEach(e => (groups[e.date || "?"] = groups[e.date || "?"] || []).push(e));
   const exList = ex.length ? Object.keys(groups).sort().reverse().map(d => `<div class="dayhead">${okDate(d) ? dlong(d) : "No date"}</div>` + groups[d].map(expRow).join("")).join("") : `<div class="empty">No expenses yet. Add what someone paid – the app works out who owes whom.</div>`;
   return head("Shared costs", "Money", `<button class="btn" data-act="settleAdd">${ic("swap")}Record a payment</button><button class="btn pri" data-act="expAdd">${ic("plus")}Add expense</button>`)
-    + tiles + `<div class="grid g2 start mt">${card("Who owes whom", balBody, { b: true, id: "mbal" })}${card("Where the money goes", donut + (dayBars ? `<h3 class="sub3">Per day</h3>${dayBars}` : ""), { id: "mchart" })}</div>
-    <div class="grid g2 start mt">${card("Expenses", `<div class="list">${exList}</div>`, { tight: true, right: `<button class="lnk" data-act="exportCsv">CSV</button>` })}${card("Everyone's share" + (i.budget ? " vs budget" : ""), `<div class="bals">${shareRows}</div><p class="help mt">Planned so far: ${money(planPP(), undefined, true)} per person from the plan.${i.budget ? "" : ` <button class="link" data-act="tripEdit">Set a budget</button>`}</p>`, { soft: "softb", id: "mshare" })}</div>`;
+    + tiles + settleCard + `<div class="grid g2 start mt">${card("Balances", balBody.replace(/<h3 class="sub3">Fewest payments[\s\S]*$/, ""), { b: true, id: "mbal" })}${card("Where the money goes", donut + (dayBars ? `<h3 class="sub3">Per day</h3>${dayBars}` : ""), { id: "mchart" })}</div>
+    <div class="grid g2 start mt">${card("Expenses", `<div class="list">${exList}</div>`, { tight: true, right: `<button class="lnk" data-act="exportCsv">CSV</button>` })}${card("Everyone's share" + (i.budget ? " vs budget" : ""), `<div class="bals">${shareRows}</div><p class="help mt">Planned so far: ${money(planPP(), undefined, true)} per person from the itinerary.${i.budget ? "" : ` <button class="link" data-act="tripEdit">Set a budget</button>`}</p>`, { soft: "softb", id: "mshare" })}</div>`;
 }
 function moneyCharts() {
   const tot = totalSpent(), cats = byCat(), cs = cats.reduce((a, c) => a + c.v, 0) || 1, CC = ["var(--p4)", "var(--p2)", "var(--p1)", "var(--p5)", "var(--p3)", "var(--p7)", "var(--p10)"];
@@ -1402,8 +1450,8 @@ function vMoneySolo() {
   const tiles = `<div class="tiles t4">${tile("Spent", money(tot, undefined, true), plural(ex.length, "expense"))}${tile("Budget", i.budget ? money(i.budget, undefined, true) : "–", i.budget ? "for the whole trip" : `<button class="link" data-act="tripEdit">Set a budget</button>`)}${tile(i.budget && left < 0 ? "Over budget" : "Left", i.budget ? money(Math.abs(left), undefined, true) : "–", i.budget && daysLeft && left > 0 ? money(left / daysLeft, undefined, true) + " a day for " + plural(daysLeft, "day") : "", i.budget ? (left < 0 ? "bad" : "ok") : "")}${tile("Per day", money(perDay, undefined, true), "on days you spent")}</div>`;
   const pct = i.budget ? tot / i.budget : 0;
   const budget = i.budget ? `<div class="row sb small"><span>Spent ${money(tot, undefined, true)}</span><span class="muted">budget ${money(i.budget, undefined, true)}</span></div><div class="bar thick ${pct > 1 ? "over" : ""}" style="margin-top:6px"><i style="width:${Math.min(100, pct * 100)}%"></i></div>
-      <p class="help mt">${pct > 1 ? "Over budget by " + money(-left, undefined, true) + "." : Math.round(pct * 100) + "% used."} Planned in your plan: ${money(planPP(), undefined, true)}.</p>`
-    : `<p class="small">Set a budget for the trip and see what's left every day.</p><button class="btn sm" data-act="tripEdit">Set a budget</button><p class="help mt">Planned in your plan: ${money(planPP(), undefined, true)}.</p>`;
+      <p class="help mt">${pct > 1 ? "Over budget by " + money(-left, undefined, true) + "." : Math.round(pct * 100) + "% used."} Planned in your itinerary: ${money(planPP(), undefined, true)}.</p>`
+    : `<p class="small">Set a budget for the trip and see what's left every day.</p><button class="btn sm" data-act="tripEdit">Set a budget</button><p class="help mt">Planned in your itinerary: ${money(planPP(), undefined, true)}.</p>`;
   const groups = {}; ex.forEach(e => (groups[e.date || "?"] = groups[e.date || "?"] || []).push(e));
   const exList = ex.length ? Object.keys(groups).sort().reverse().map(d => `<div class="dayhead">${okDate(d) ? dlong(d) : "No date"}</div>` + groups[d].map(expRow).join("")).join("") : `<div class="empty">No expenses yet. Add what you pay as you go – the charts fill in by themselves.</div>`;
   return head("Your spending", "Money", `<button class="btn pri" data-act="expAdd">${ic("plus")}Add expense</button>`)
@@ -1629,11 +1677,11 @@ function groupsSheet() {
 }
 function addSheet() {
   const it = (act, icon, t, s) => `<button class="item opt click" data-act="${act}"><span class="emo">${ic(icon)}</span><div class="grow"><div class="nm">${t}</div><div class="tiny muted">${s}</div></div>${ic("right")}</button>`;
-  modal("Add", `<div class="list">${it("expAdd", "money", "Expense", solo() ? "Something you paid" : "Someone paid – split it")}${it("ideaAdd", "idea", "Idea", solo() ? "A place you'd love to see, with a photo" : "A place to vote on, with a photo")}${it("planAdd", "cal", "Plan", "Something on a day")}${it("walletAdd", "ticket", "Booking", "Flight, stay, ticket – offline")}${it("packGo", "bag", "Packing", "Something to bring")}</div>`);
+  modal("Add", `<div class="list">${it("expAdd", "money", "Expense", solo() ? "Something you paid" : "Someone paid – split it")}${it("ideaAdd", "idea", "Idea", solo() ? "A place you'd love to see, with a photo" : "A place to vote on, with a photo")}${it("planAdd", "cal", "Itinerary", "Something on a day")}${it("walletAdd", "ticket", "Booking", "Flight, stay, ticket – offline")}${it("packGo", "bag", "Packing", "Something to bring")}</div>`);
 }
 function moreSheet() {
   const it = (href, icon, t) => `<a class="item opt click" href="#/${href}" data-act="close">${`<span class="emo">${ic(icon)}</span>`}<span class="grow nm">${t}</span>${ic("right")}</a>`;
-  modal("More", `<div class="list">${it("wallet", "ticket", "Travel wallet")}${it("pack", "bag", "Packing")}${solo() ? it("group", "devices", "Trip & devices") : it("group", "users", "Group & invite")}${it("settings", "gear", "Settings")}</div>`);
+  modal("More", `<div class="list">${it("book", "check", "Book & budget")}${it("wallet", "ticket", "Travel wallet")}${it("pack", "bag", "Packing")}${solo() ? it("group", "devices", "Trip & devices") : it("group", "users", "Group & invite")}${it("settings", "gear", "Settings")}</div>`);
 }
 
 // ------------------------------------------------------------ expense
@@ -1703,7 +1751,7 @@ function itemModal(kind, id, pre = {}) {
   const col = kind === "idea" ? "ideas" : "plan", x = id ? D()[col][id] : { ...pre }, i = info();
   PH = { id: x.photo || "", file: null, drop: false };
   const td = tripDays();
-  const m = modal(kind === "idea" ? (id ? "Edit idea" : "Suggest a place") : (id ? "Edit plan" : "Add a plan"), `
+  const m = modal(kind === "idea" ? (id ? "Edit idea" : "Suggest a place") : (id ? "Edit itinerary item" : "Add to itinerary"), `
     ${field(kind === "idea" ? "Place or activity" : "What", `<input class="inp" id="iTitle" value="${esc(x.title || "")}" placeholder="${kind === "idea" ? "e.g. Sunset at Miradouro" : "e.g. Lunch at Time Out Market"}" autofocus>`)}
     ${kind === "plan" ? `<div class="frow">${field("Day", `<select class="inp" id="iDate">${(td.length ? td : [x.date || today()]).map(d => opt(d, dlong(d), x.date || pre.date || td[0])).join("")}${x.date && !td.includes(x.date) ? opt(x.date, dlong(x.date), x.date) : ""}</select>`)}${field("Time", `<input class="inp" type="time" id="iTime" value="${esc(x.time || "")}">`)}</div>` : ""}
     ${field("Where", `<input class="inp" id="iPlace" value="${esc(x.place || "")}" placeholder="Address or name – opens in Maps">`)}
@@ -1712,6 +1760,7 @@ function itemModal(kind, id, pre = {}) {
     ${photoField(PH.id)}
     ${field("Link", `<input class="inp" id="iLink" value="${esc(x.link || "")}" placeholder="Website, booking or review (optional)">`)}
     ${field("Notes", `<textarea class="inp" id="iNote" rows="2" placeholder="Opening hours, why it's great…">${esc(x.note || "")}</textarea>`)}
+    ${kind === "plan" ? field("Booking", `<div class="seg bkseg" id="iBk">${[["none", "Not needed"], ["todo", "Still to book"], ["done", "Booked"]].map(([k, l]) => `<button type="button" class="${bkOf(x) === k ? "on" : ""}" data-act="bkSeg" data-v="${k}">${l}</button>`).join("")}</div>`) : ""}
     <p class="small badc" id="iErr"></p>`,
     `${id ? `<button class="btn danger" data-act="itemDel" data-k="${kind}" data-id="${id}">${ic("trash")}Delete</button>` : ""}<button class="btn" data-act="close">Cancel</button><button class="btn pri" data-act="itemSave" data-k="${kind}" data-id="${id || ""}" data-from="${pre.from || ""}">Save</button>`);
   wirePhoto(m);
@@ -1729,7 +1778,7 @@ async function itemSave(kind, id, from) {
   else if (PH.drop && PH.id) del("photos", PH.id);
   const c = val("iCur") || i.cur, rate = c === i.cur ? 1 : num((i.rates || {})[c]) || 1;
   const rec = { id: id || uid(), title: t.slice(0, 80), place: val("iPlace").slice(0, 160), cost: num(val("iCost")), per: val("iPer") || "person", ccur: c, crate: rate, photo: pid, link: /^https?:\/\//i.test(val("iLink")) ? val("iLink").slice(0, 400) : (val("iLink") ? "https://" + val("iLink").slice(0, 400) : ""), note: val("iNote").slice(0, 600) };
-  if (kind === "plan") { rec.date = val("iDate"); rec.time = val("iTime"); if (from) rec.idea = from; }
+  if (kind === "plan") { rec.date = val("iDate"); rec.time = val("iTime"); if (from) rec.idea = from; const bk = (($("#iBk .on") || {}).dataset || {}).v || "none", old = id && D().plan[id] ? bkOf(D().plan[id]) : "none"; if (bk !== old || !id) { rec.bk = bk; if (bk === "done" && old !== "done") rec.bookedBy = me(); } }
   put(col, rec);
   if (kind === "plan" && from && D().ideas[from]) put("ideas", { ...D().ideas[from], planned: rec.date });
   closeModal(); rerender(); toast(kind === "idea" ? (id ? "Saved." : solo() ? "Added to your ideas." : "Added – the group can vote now.") : "Added to " + dlong(rec.date) + ".");
@@ -1740,8 +1789,9 @@ function ideaToPlan(id) {
 }
 
 // ------------------------------------------------------------ wallet
-function walletModal(id) {
-  const w = id ? D().wallet[id] : { kind: "flight" };
+function walletFromPlan(p) { if (!p) return; walletModal(null, { kind: "ticket", title: p.title, date: p.date, time: p.time, place: p.place }); }
+function walletModal(id, pre) {
+  const w = id ? D().wallet[id] : { kind: "flight", ...(pre || {}) };
   PH = { id: w.photo || "", file: null, drop: false };
   const m = modal(id ? "Edit booking" : "Add a booking", `<div class="cats">${Object.entries(WKIND).map(([k, [n, icn]]) => `<button type="button" class="cat ${w.kind === k ? "on" : ""}" data-act="wKind" data-v="${k}">${ic(icn).replace("<svg", '<svg width="16" height="16"')} ${n}</button>`).join("")}</div><input type="hidden" id="wKind" value="${esc(w.kind || "flight")}">
     ${field("Title", `<input class="inp" id="wTitle" value="${esc(w.title || "")}" placeholder="e.g. TAP 1043 Zurich → Lisbon" autofocus>`)}
@@ -1778,7 +1828,7 @@ function tripModal() {
 function viewPhoto(pid) { const p = photo(pid); if (!p) return; const el = document.createElement("div"); el.className = "pview"; el.innerHTML = `<img src="${p}" alt=""><button class="iconbtn" aria-label="Close">${ic("x")}</button>`; el.onclick = () => el.remove(); document.body.appendChild(el); }
 
 /* render loop, actions, wiring, boot */
-const VIEWS = { trip: vTrip, plan: vPlan, ideas: vIdeas, money: vMoney, wallet: vWallet, pack: vPack, group: vGroup, settings: vSettings };
+const VIEWS = { trip: vTrip, plan: vPlan, book: vBook, ideas: vIdeas, money: vMoney, wallet: vWallet, pack: vPack, group: vGroup, settings: vSettings };
 let lastRoute = null, JREPL = "";
 function render() {
   applyTheme();
@@ -1850,6 +1900,10 @@ const ACT = {
   ideaAdd: () => { closeModal(); itemModal("idea"); }, ideaEdit: d => itemModal("idea", d.id), ideaPlan: d => ideaToPlan(d.id),
   ideaFilter: d => { IF = d.v; rerender(); },
   vote: d => { if (!me()) return whoAmI(); const k = d.id + "|" + me(), v = D().votes[k]; put("votes", { id: k, idea: d.id, who: me(), on: !(v && v.on) }); rerender(); },
+  bookTog: d => { const p = D().plan[d.id]; if (!p) return; const was = isBooked(p); put("plan", { ...p, bk: was ? "todo" : "done", bookedBy: was ? "" : me() }); rerender(); if (!was) toast(`${esc(p.title)} is booked.`); },
+  bookFilter: d => { BF = d.v; rerender(); },
+  bkSeg: (d, el) => { el.parentNode.querySelectorAll("button").forEach(b => b.classList.toggle("on", b === el)); },
+  bookWallet: d => { const p = D().plan[d.id]; walletFromPlan(p); },
   planAdd: d => { closeModal(); itemModal("plan", null, { date: d.d || (phase().k === "during" ? today() : tripDays()[0]) }); }, planEdit: d => itemModal("plan", d.id),
   itemSave: d => itemSave(d.k, d.id, d.from),
   itemDel: d => { const col = d.k === "idea" ? "ideas" : "plan", x = D()[col][d.id]; del(col, d.id); if (d.k === "plan" && x.idea && D().ideas[x.idea]) put("ideas", { ...D().ideas[x.idea], planned: "" }); closeModal(); rerender(); toast("Deleted.", () => { put(col, { ...x, del: false }); rerender(); }); },
