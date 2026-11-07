@@ -561,6 +561,15 @@ html[data-dark="1"] .thumb.ph,html[data-dark="1"] .iimg.ph{background:linear-gra
 .bookchk{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:6px;cursor:pointer}.bookchk input{width:22px;height:22px;accent-color:var(--a)}.bookchk span{display:flex;flex-direction:column}.bookchk small{color:var(--ink2);font-size:.8em}
 .bstrip{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;background:var(--card);border-radius:16px;padding:12px 16px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid color-mix(in srgb,var(--line) 70%,transparent)}.bstrip small{display:block;color:var(--ink2);font-size:.8em;margin-top:2px}.bstrip svg{width:18px;height:18px;color:var(--ink2)}
 .bprog{width:90px;height:8px;border-radius:8px;background:var(--bg2);overflow:hidden;flex:none}.bprog i{display:block;height:100%;background:var(--a);border-radius:8px}
+.bsecs{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:14px}.bsec{display:flex;align-items:center;gap:10px;text-align:left;background:var(--card);border:1px solid color-mix(in srgb,var(--line) 70%,transparent);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);cursor:pointer;color:inherit;font:inherit}.bsec.on{box-shadow:0 0 0 2px var(--a),var(--shadow)}.bsec{min-width:0}.bsec .grow{min-width:0}.bsec b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bsec small{display:block;font-size:.76em;color:var(--ink2)}.bsec .v{font-family:var(--serif);font-size:1.05em;text-align:right;white-space:nowrap;flex:none}.pp{font-size:.72em;font-weight:400;color:var(--ink2)}.bsec .v small{display:inline;margin-left:2px}
+.bsecseg{flex-wrap:wrap;max-width:100%}.btseg{display:flex;flex-wrap:wrap;width:100%}.btseg button{flex:1 1 auto}
+.bhead,.brow2{display:grid;grid-template-columns:34px minmax(0,2.2fr) minmax(0,1.3fr) minmax(0,1.3fr) minmax(0,1.1fr) 76px;gap:12px;align-items:center;padding:12px 16px}.bhead{font-size:.68em;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);border-bottom:2px solid var(--line);padding-top:14px;padding-bottom:10px}
+.brow2{border-bottom:1px solid var(--line)}.brow2:last-child{border-bottom:0}.brow2.paid .nm{text-decoration:line-through;opacity:.6}.bwhat .nm{font-weight:500}.bchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;align-items:center}
+.ccat{display:inline-block;font-size:.72em;border-radius:20px;padding:2px 8px;background:color-mix(in srgb,var(--a) 12%,var(--card));color:var(--ink)}.ccat.t{background:var(--bg2)}.ccat.o{background:transparent;border:1px dashed var(--line2,#cfc6bd);color:var(--ink2)}
+.borg{display:inline-flex;align-items:center;gap:4px;font-size:.74em;color:var(--ink2)}.bwhere a{display:inline-flex;align-items:center;gap:4px;color:inherit;font-size:.9em;text-decoration:none;min-width:0}.bwhere a span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bwhere svg{width:14px;height:14px;flex:none;color:var(--ink2)}.bwhen{font-size:.86em;color:var(--ink2)}
+.brow2 .bkamt{text-align:right}.brow2 .bkamt small{display:block}.brow2 .bkamt small svg{width:11px;height:11px;vertical-align:-1px}.blink{display:flex;gap:2px;justify-content:flex-end}
+.prow.pend{opacity:.75}.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 12px 5px 6px;font:inherit;font-size:.86em;cursor:pointer;color:inherit}.chip.on{background:color-mix(in srgb,var(--a) 14%,var(--card));border-color:var(--a)}
+@media(max-width:760px){.bhead{display:none}.brow2{grid-template-columns:30px minmax(0,1fr) auto;grid-template-areas:"t w a" "t p p" "t d l";row-gap:4px;padding:12px}.brow2 .btick{grid-area:t;align-self:start}.bwhat{grid-area:w}.bkamt{grid-area:a}.bwhere{grid-area:p}.bwhen{grid-area:d}.blink{grid-area:l}.bsecs{grid-template-columns:repeat(2,minmax(0,1fr))}.bsec{padding:10px}.bsec .v{display:none}}
 .btick{flex:none;width:28px;height:28px;border-radius:9px;border:1.5px solid var(--line2,#cfc6bd);background:var(--card);display:grid;place-items:center;color:transparent;cursor:pointer}.btick svg{width:16px;height:16px}.btick.on{background:var(--a);border-color:var(--a);color:#fff}.bkseg{display:flex;width:100%}.bkseg button{flex:1}.bkamt{text-align:right;line-height:1.15}.bkamt small{display:block;font-size:.72em;color:var(--ink2)}.brk.paid .nm{text-decoration:line-through;opacity:.6}
 .tile .of{font-size:.5em;color:var(--ink2)}
 .bstack{display:flex;height:12px;border-radius:8px;overflow:hidden;background:var(--bg2);margin-top:12px}.bstack i{display:block;height:100%}.bstack .b1,.hleg .b1{background:var(--a)}.bstack .b2,.hleg .b2{background:color-mix(in srgb,var(--a) 40%,var(--bg2))}.hleg .b3{background:var(--bg2);border:1px solid var(--line)}
@@ -641,7 +650,7 @@ input[type=date].inp,input[type=time].inp{min-width:0;width:100%;-webkit-appeara
 .invite>div:first-child{flex:1 1 260px;min-width:0}
 </style></head>
 <body data-theme="Ocean"><div id="root"></div>
-<script>window.BP_DEMO=false;window.BP_SHOP="https://www.etsy.com/shop/TrueHavenStudios";window.BP_VERSION="1.2.0";window.BP_SYNC_URL="https://truehaven-sync.fishing-switzerland.workers.dev";</script>
+<script>window.BP_DEMO=false;window.BP_SHOP="https://www.etsy.com/shop/TrueHavenStudios";window.BP_VERSION="1.3.0";window.BP_SYNC_URL="https://truehaven-sync.fishing-switzerland.workers.dev";</script>
 <script>const te = new TextEncoder();
   const QR = (() => {
     const ECC = [-1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26];
@@ -748,6 +757,10 @@ window.BP_SAMPLE = function () {
   P("p12", 2, "09:00", "Surf lesson in Carcavelos", "Carcavelos Beach", 60, 0, "Maya & Jonas", "🏄");
   P("p13", 3, "11:15", "Fly home", "Lisbon Airport", 0, 0, "", "✈️");
   ["p1", "p2", "p9", "p11", "p12", "p13"].forEach((i, k) => { d.plan[i].bk = "done"; d.plan[i].bookedBy = ["m1", "m2", "m1", "m3", "m4", "m1"][k]; }); ["p3", "p5", "p10"].forEach(i => d.plan[i].bk = "todo");
+  const TY = { p1: "travel", p2: "stay", p3: "food", p4: "food", p8: "food", p9: "food", p10: "travel", p13: "travel" }, CT = { p3: "Food & culinary", p4: "Food & culinary", p5: "Culture & museums", p6: "Sightseeing", p7: "Sightseeing", p8: "Food & culinary", p9: "Food & culinary", p11: "Culture & museums", p12: "Adventure" }, OG = { p2: "m2", p5: "m2", p9: "m1", p11: "m3", p12: "m4", p14: "m2" };
+  d.plan.p14 = { id: "p14", date: day(1), time: "08:00", date2: day(2), time2: "19:00", title: "Rental car", place: "Lisbon Airport, Avis desk", cost: 140, per: "group", ccur: "EUR", crate: 1, note: "Sintra & Cascais days", emoji: "🚗", link: "https://www.avis.com", bk: "todo", itin: false, upd: u(), by: "m2" };
+  Object.keys(d.plan).forEach(i => { const x = d.plan[i]; x.type = TY[i] || (i === "p14" ? "travel" : "activity"); if (CT[i]) x.cat = CT[i]; if (OG[i]) x.org = OG[i]; });
+  Object.assign(d.plan.p2, { title: "Flat in Bairro Alto", date2: day(3), time: "16:00", time2: "10:00", cost: 960, per: "group", note: "Code for the key box in the wallet" });
   const I = (id, title, place, cost, per, note, emoji, planned) => d.ideas[id] = { id, title, place, cost, per: per || "person", ccur: "EUR", crate: 1, note, emoji, planned: planned || "", upd: u(), by: ["m1", "m2", "m3", "m4"][id.length % 4] };
   I("i1", "Sunset at Miradouro da Senhora do Monte", "Miradouro da Senhora do Monte", 0, 0, "Best view over the city – bring drinks", "🌇");
   I("i2", "Day trip to Cascais", "Cascais", 12, 0, "Train along the coast, beach + old town", "🏖️");
@@ -1225,9 +1238,17 @@ function byDay() { const o = {}; spends().forEach(e => { o[e.date] = (o[e.date] 
 // planned costs (plan items + ideas not yet planned): per person, in the trip currency
 const n = () => Math.max(1, members().length);
 function costPP(x) { const c = num(x.cost) * (x.ccur && x.ccur !== info().cur ? (num(x.crate) || 1) : 1); return x.per === "group" ? c / n() : c; }
-const planItems = () => live("plan").filter(p => p.date && p.title);
-function planPP() { return r2(planItems().reduce((a, p) => a + costPP(p), 0)); }
-function dayItems(d) { return planItems().filter(p => p.date === d).sort((a, b) => (a.time || "99").localeCompare(b.time || "99") || (a.n || 0) - (b.n || 0)); }
+const allPlan = () => live("plan").filter(p => p.date && p.title);
+const planItems = () => allPlan().filter(p => p.itin !== false);
+function planPP() { return r2(allPlan().reduce((a, p) => a + costPP(p), 0)); }
+// a stay or a rental car also shows on its last day (check-out / return), without its cost
+function dayItems(d) { const it = planItems(), ends = it.filter(p => p.date2 && p.date2 !== p.date && p.date2 === d && ["stay", "travel"].includes(typeOf(p))).map(p => ({ ...p, cost: 0, time: p.time2 || "", _end: true }));
+  return it.filter(p => p.date === d).concat(ends).sort((a, b) => (a.time || "99").localeCompare(b.time || "99") || (a.n || 0) - (b.n || 0)); }
+const BTYPE = { activity: ["Tours & activities", "🎟️", "fun"], stay: ["Accommodation", "🛏️", "stay"], travel: ["Flights & transport", "✈️", "travel"], food: ["Food & dining", "🍽️", "food"], other: ["Other", "✨", "other"] };
+const BCATS = ["Sightseeing", "Adventure", "Food & culinary", "Culture & museums", "Nature & hiking", "Beach & water", "Nightlife", "Shopping", "Wellness & relax", "Shows & events", "Family & kids", "Day trip", "Other"];
+const typeOf = p => BTYPE[p.type] ? p.type : "activity";
+const endLab = t => t === "stay" ? ["Check-in", "Check-out"] : t === "travel" ? ["Depart / pick-up", "Return / drop-off"] : ["Day", "Ends (optional)"];
+function dateRange(p) { const t = typeOf(p), [a, b] = endLab(t); if (p.date2 && p.date2 !== p.date) return `${dshort(p.date)}${p.time ? " " + esc(p.time) : ""} → ${dshort(p.date2)}${p.time2 ? " " + esc(p.time2) : ""}${t === "stay" ? ` · ${plural(Math.max(1, Math.round((pd(p.date2) - pd(p.date)) / 864e5)), "night")}` : ""}`; return dshort(p.date) + (p.time ? " · " + esc(p.time) : ""); }
 function tripDays() { const i = info(); return days(i.start, i.end); }
 function phase() {
   const i = info(), t = today();
@@ -1352,7 +1373,8 @@ const stRow = t => `<div class="item st">${av(mem(t.from))}<span class="small gr
 function costLine(x) { const c = num(x.cost); if (!c) return x.place ? esc(x.place) : "No cost"; const pp = costPP(x); return `${money(pp, undefined, pp >= 100)}${solo() ? "" : " per person"}${x.place ? " · " + esc(x.place) : ""}`; }
 function thumb(x, cls = "") { const p = photo(x.photo); return p ? `<img class="thumb ${cls}" src="${p}" alt="" data-act="viewPhoto" data-id="${x.photo}">` : `<span class="thumb ${cls} ph" style="--h:${(x.title || "").length * 37 % 360}">${esc(x.emoji || "📍")}</span>`; }
 function planRow(p) {
-  return `<div class="item click prow" data-act="planEdit" data-id="${p.id}"><span class="ptime">${p.time ? esc(p.time) : "–"}</span>${thumb(p, "sm")}<div class="grow"><div class="nm">${esc(p.title)}${needsBook(p) ? (isBooked(p) ? ` <span class="bk ok">${ic("check")}booked</span>` : ` <span class="bk">to book</span>`) : ""}</div><div class="tiny muted">${costLine(p)}${p.note ? " · " + esc(p.note).slice(0, 80) : ""}</div></div>${p.place ? `<a class="iconbtn" href="${mapsLink(p.place)}" target="_blank" rel="noopener" data-stop="1" aria-label="Open in Maps">${ic("pin")}</a>` : ""}</div>`;
+  if (p._end) return `<div class="item click prow pend" data-act="planEdit" data-id="${p.id}"><span class="ptime">${p.time ? esc(p.time) : "–"}</span><span class="emo">${BTYPE[typeOf(p)][1]}</span><div class="grow"><div class="nm">${typeOf(p) === "stay" ? "Check-out" : "Return"} · ${esc(p.title)}</div><div class="tiny muted">${p.place ? esc(p.place) : "since " + dshort(p.date)}</div></div></div>`;
+  return `<div class="item click prow" data-act="planEdit" data-id="${p.id}"><span class="ptime">${p.time ? esc(p.time) : "–"}</span>${thumb(p, "sm")}<div class="grow"><div class="nm">${typeOf(p) === "stay" && p.date2 ? "Check-in · " : ""}${esc(p.title)}${needsBook(p) ? (isBooked(p) ? ` <span class="bk ok">${ic("check")}booked</span>` : ` <span class="bk">to book</span>`) : ""}</div><div class="tiny muted">${p.cat ? `<span class="ccat">${esc(p.cat)}</span> ` : ""}${costLine(p)}${p.note ? " · " + esc(p.note).slice(0, 80) : ""}</div></div>${p.place ? `<a class="iconbtn" href="${mapsLink(p.place)}" target="_blank" rel="noopener" data-stop="1" aria-label="Open in Maps">${ic("pin")}</a>` : ""}</div>`;
 }
 function vPlan() {
   const td = tripDays(), others = planItems().filter(p => !td.includes(p.date)).sort((a, b) => a.date.localeCompare(b.date));
@@ -1361,7 +1383,7 @@ function vPlan() {
     return `<section class="card dayc ${d === today() ? "now" : ""}"><div class="band ${k % 2 ? "b" : ""}"><span class="t">Day ${k + 1} · ${dlong(d)}</span><span class="r">${c ? money(c, undefined, true) + (solo() ? "" : " pp") : ""}<button class="lnk" data-act="planAdd" data-d="${d}">+ Add</button></span></div>
     <div class="body tight">${it.length ? `<div class="list">${it.map(planRow).join("")}</div>` : `<p class="muted small" style="margin:8px 0">Free day – or <button class="link" data-act="planAdd" data-d="${d}">add something</button>${idle ? ` or <a class="link" href="#/ideas">pick from ${plural(idle, "idea")}</a>` : ""}.</p>`}</div></section>`; };
   return head("Day by day", "Itinerary", `<button class="btn" data-act="tripEdit">${ic("cal")}Dates</button><a class="btn" href="#/book">${ic("check")}Book & budget</a><button class="btn pri" data-act="planAdd">${ic("plus")}Add to itinerary</button>`)
-    + `<div class="tots t3 mb"><div><b>${td.length}</b><span>days</span></div><div><b>${planItems().length}</b><span>plans</span></div><div><b>${money(planPP(), undefined, true)}</b><span>${solo() ? "planned" : "planned per person"}</span></div></div>` + bookStrip()
+    + `<div class="tots t3 mb"><div><b>${td.length}</b><span>days</span></div><div><b>${planItems().length}</b><span>items</span></div><div><b>${money(planPP(), undefined, true)}</b><span>${solo() ? "planned" : "planned per person"}</span></div></div>` + bookStrip()
     + (td.length ? `<div class="days">${td.map(day).join("")}</div>` : `<div class="empty">Set your travel dates to see every day. <button class="btn sm" data-act="tripEdit">Set dates</button></div>`)
     + (others.length ? `<h2 class="sec">Outside your dates</h2><div class="card pad"><div class="list">${others.map(p => `<div class="dayhead">${dlong(p.date)}</div>` + planRow(p)).join("")}</div></div>` : "");
 }
@@ -1371,29 +1393,40 @@ const bkOf = p => p.bk === "todo" || p.bk === "done" ? p.bk : p.bk === undefined
 const needsBook = p => bkOf(p) !== "none", isBooked = p => bkOf(p) === "done";
 const costAll = p => costPP(p) * (solo() ? 1 : n());
 function bookStrip() {
-  const it = planItems().filter(needsBook); if (!it.length) return "";
+  const it = allPlan().filter(needsBook); if (!it.length) return "";
   const done = it.filter(isBooked).length;
   return `<a class="bstrip" href="#/book"><span class="grow"><b>${done} of ${it.length} booked</b><small>${done === it.length ? "everything with a ticket or reservation is done" : plural(it.length - done, "thing") + " still to book · " + money(r2(it.filter(p => !isBooked(p)).reduce((a, p) => a + costPP(p), 0)), undefined, true) + (solo() ? "" : " per person")}</small></span><span class="bprog"><i style="width:${done / it.length * 100}%"></i></span>${ic("right")}</a>`;
 }
-let BF = "todo";
+let BF = "todo", BS = "all";
 function vBook() {
-  const all = planItems().filter(needsBook).sort((a, b) => (a.date + (a.time || "99")).localeCompare(b.date + (b.time || "99"))), i = info(), S1 = solo(), N = S1 ? 1 : n();
-  const todo = all.filter(p => !isBooked(p)), done = all.filter(isBooked), free = planItems().length - all.length;
-  const sum = (l, f) => r2(l.reduce((a, p) => a + f(p), 0));
-  const planPPv = planPP(), bookedPP = sum(done, costPP), todoPP = sum(todo, costPP), spentPP = S1 ? totalSpent() : myShare(me());
+  const i = info(), S1 = solo(), N = S1 ? 1 : n(), sum = (l, f) => r2(l.reduce((a2, p) => a2 + f(p), 0));
+  const every = allPlan().filter(needsBook).sort((a2, b2) => (a2.date + (a2.time || "99")).localeCompare(b2.date + (b2.time || "99")));
+  const inSec = BS === "all" ? every : every.filter(p => typeOf(p) === BS);
+  const todoA = every.filter(p => !isBooked(p)), doneA = every.filter(isBooked);
+  const todo = inSec.filter(p => !isBooked(p)), done = inSec.filter(isBooked), free = allPlan().length - every.length;
+  const planPPv = planPP(), bookedPP = sum(doneA, costPP), todoPP = sum(todoA, costPP);
   const budget = i.budget || 0, after = r2(budget - planPPv);
-  const tiles = `<div class="tiles t4">${tile(S1 ? "Planned" : "Planned per person", money(planPPv, undefined, true), S1 ? plural(planItems().length, "item") : "group " + money(r2(planPPv * N), undefined, true))}${tile("Booked", `${done.length}<small class="of"> / ${all.length}</small>`, money(bookedPP, undefined, true) + (S1 ? "" : " pp"), done.length === all.length && all.length ? "ok" : "")}${tile("Still to book", money(todoPP, undefined, true), todo.length ? plural(todo.length, "thing") + (S1 ? "" : " · per person") : "all done", todo.length ? "" : "ok")}${tile(budget ? (after < 0 ? "Over budget" : "Left after plan") : "Budget", budget ? money(Math.abs(after), undefined, true) : "–", budget ? (S1 ? "" : "per person · ") + "budget " + money(budget, undefined, true) : `<button class="link" data-act="tripEdit">Set a budget</button>`, budget ? (after < 0 ? "bad" : "ok") : "")}</div>`;
-  const row = p => `<div class="item brk ${isBooked(p) ? "paid" : ""}"><button class="btick ${isBooked(p) ? "on" : ""}" data-act="bookTog" data-id="${p.id}" aria-label="Booked">${ic("check")}</button><div class="grow click" data-act="planEdit" data-id="${p.id}"><div class="nm">${esc(p.title)}</div><div class="tiny muted">${dshort(p.date)}${p.time ? " · " + esc(p.time) : ""}${isBooked(p) && p.bookedBy && !S1 ? " · booked by " + esc(mem(p.bookedBy).name) : ""}</div></div>
-    <div class="bkamt"><b>${money(costPP(p), undefined, costPP(p) >= 100)}</b>${S1 ? "" : `<small>${p.per === "group" ? money(num(p.cost) * (p.ccur && p.ccur !== i.cur ? num(p.crate) || 1 : 1), undefined, true) + " total" : money(costAll(p), undefined, true) + " for all"}</small>`}</div>
-    ${p.link && !isBooked(p) ? `<a class="btn sm" href="${esc(p.link)}" target="_blank" rel="noopener">Book</a>` : isBooked(p) ? `<button class="iconbtn" data-act="bookWallet" data-id="${p.id}" title="Add the ticket to the wallet" aria-label="Add to wallet">${ic("ticket")}</button>` : ""}</div>`;
-  const list = BF === "todo" ? todo : BF === "done" ? done : all;
-  const pct = all.length ? done.length / all.length : 0;
-  return head("Plan · book · budget", "Book & budget", `<a class="btn" href="#/plan">${ic("cal")}Itinerary</a><button class="btn pri" data-act="planAdd">${ic("plus")}Add to itinerary</button>`)
+  const tiles = `<div class="tiles t4">${tile(S1 ? "Planned" : "Planned per person", money(planPPv, undefined, true), S1 ? plural(allPlan().length, "item") : "group " + money(r2(planPPv * N), undefined, true))}${tile("Booked", `${doneA.length}<small class="of"> / ${every.length}</small>`, money(bookedPP, undefined, true) + (S1 ? "" : " pp"), doneA.length === every.length && every.length ? "ok" : "")}${tile("Still to book", money(todoPP, undefined, true), todoA.length ? plural(todoA.length, "thing") + (S1 ? "" : " · per person") : "all done", todoA.length ? "" : "ok")}${tile(budget ? (after < 0 ? "Over budget" : "Left after plan") : "Budget", budget ? money(Math.abs(after), undefined, true) : "–", budget ? (S1 ? "" : "per person · ") + "budget " + money(budget, undefined, true) : `<button class="link" data-act="tripEdit">Set a budget</button>`, budget ? (after < 0 ? "bad" : "ok") : "")}</div>`;
+  const secs = Object.keys(BTYPE).map(k => { const l = every.filter(p => typeOf(p) === k); return [k, l]; }).filter(([, l]) => l.length);
+  const secCards = secs.length ? `<div class="bsecs">${secs.map(([k, l]) => { const d2 = l.filter(isBooked).length; return `<button class="bsec ${BS === k ? "on" : ""}" data-act="bookSec" data-v="${k}"><span class="emo">${BTYPE[k][1]}</span><span class="grow"><b>${BTYPE[k][0]}</b><small>${d2} of ${l.length} booked</small></span><span class="v">${money(sum(l, costPP), undefined, true)}${S1 ? "" : "<small>pp</small>"}</span></button>`; }).join("")}</div>` : "";
+  const total = p => p.per === "group" || S1 ? num(p.cost) * (p.ccur && p.ccur !== i.cur ? num(p.crate) || 1 : 1) : costAll(p);
+  const row = p => { const t = typeOf(p), pay = p.payBy && D().members[p.payBy] ? mem(p.payBy) : null, org = p.org && D().members[p.org] ? mem(p.org) : null, ex = D().exp["bx" + p.id];
+    return `<div class="brow2 ${isBooked(p) ? "paid" : ""}"><button class="btick ${isBooked(p) ? "on" : ""}" data-act="bookTog" data-id="${p.id}" aria-label="Booked">${ic("check")}</button>
+    <div class="bwhat click" data-act="planEdit" data-id="${p.id}"><div class="nm">${BTYPE[t][1]} ${esc(p.title)}</div><div class="bchips">${p.cat ? `<span class="ccat">${esc(p.cat)}</span>` : `<span class="ccat t">${BTYPE[t][0]}</span>`}${p.itin === false ? `<span class="ccat o">not in itinerary</span>` : ""}${org && !S1 ? `<span class="borg">${av(org, "xs")}${esc(org.name)} organises</span>` : ""}</div></div>
+    <div class="bwhere">${p.place ? `<a href="${mapsLink(p.place)}" target="_blank" rel="noopener">${ic("pin")}<span>${esc(p.place.split(",")[0])}</span></a>` : `<span class="faint">–</span>`}</div>
+    <div class="bwhen">${dateRange(p)}</div>
+    <div class="bkamt"><b>${money(costPP(p), undefined, costPP(p) >= 100)}${S1 ? "" : `<span class="pp"> pp</span>`}</b>${S1 ? "" : `<small>${money(total(p), undefined, true)} total${pay ? ` · ${esc(pay.name)} pays` : ""}</small>`}${ex && !ex.del ? `<small class="okc">${ic("check")} in Money</small>` : ""}</div>
+    <div class="blink">${p.link ? `<a class="iconbtn" href="${esc(p.link)}" target="_blank" rel="noopener" title="Open link" aria-label="Open link">${ic("link")}</a>` : ""}${isBooked(p) ? `<button class="iconbtn" data-act="bookWallet" data-id="${p.id}" title="Add the ticket to the wallet" aria-label="Add to wallet">${ic("ticket")}</button>` : ""}</div></div>`; };
+  const list = BF === "todo" ? todo : BF === "done" ? done : inSec;
+  const pct = every.length ? doneA.length / every.length : 0;
+  return head("Plan · book · budget", "Book & budget", `<a class="btn" href="#/plan">${ic("cal")}Itinerary</a><button class="btn pri" data-act="bookAdd">${ic("plus")}Add a booking</button>`)
     + tiles
-    + `<div class="card pad mt"><div class="row sb wrap"><b>${done.length} of ${all.length} booked</b><span class="tiny muted">${free ? plural(free, "free item") + " in your itinerary need no booking" : ""}</span></div><div class="bar thick a" style="margin:10px 0 4px"><i style="width:${pct * 100}%"></i></div>
-      ${budget ? `<div class="bstack"><i class="b1" style="width:${Math.min(100, bookedPP / Math.max(budget, planPPv) * 100)}%"></i><i class="b2" style="width:${Math.min(100, todoPP / Math.max(budget, planPPv) * 100)}%"></i>${spentPP > 0 ? "" : ""}</div><div class="hleg"><span><i class="b1"></i>booked ${money(bookedPP, undefined, true)}</span><span><i class="b2"></i>to book ${money(todoPP, undefined, true)}</span><span><i class="b3"></i>${after >= 0 ? "free in budget " + money(after, undefined, true) : "over budget " + money(-after, undefined, true)}</span></div>` : ""}</div>`
-    + `<div class="row sb wrap mt mb"><div class="seg">${[["todo", "To book · " + todo.length], ["done", "Booked · " + done.length], ["all", "All"]].map(([k, l]) => `<button class="${BF === k ? "on" : ""}" data-act="bookFilter" data-v="${k}">${l}</button>`).join("")}</div><span class="tiny muted">Tick it when it's booked${S1 ? "" : " – everyone sees it"}</span></div>`
-    + (list.length ? `<div class="card"><div class="body tight"><div class="list">${list.map(row).join("")}</div></div></div>` : `<div class="empty">${all.length ? (BF === "todo" ? "Everything is booked. 🎉" : "Nothing booked yet.") : "Add things with a cost or a booking link to your itinerary – they show up here to book."}</div>`);
+    + `<div class="card pad mt"><div class="row sb wrap"><b>${doneA.length} of ${every.length} booked</b><span class="tiny muted">${free ? plural(free, "item") + " in your itinerary need no booking" : ""}</span></div><div class="bar thick a" style="margin:10px 0 4px"><i style="width:${pct * 100}%"></i></div>
+      ${budget ? `<div class="bstack"><i class="b1" style="width:${Math.min(100, bookedPP / Math.max(budget, planPPv) * 100)}%"></i><i class="b2" style="width:${Math.min(100, todoPP / Math.max(budget, planPPv) * 100)}%"></i></div><div class="hleg"><span><i class="b1"></i>booked ${money(bookedPP, undefined, true)}</span><span><i class="b2"></i>to book ${money(todoPP, undefined, true)}</span><span><i class="b3"></i>${after >= 0 ? "free in budget " + money(after, undefined, true) : "over budget " + money(-after, undefined, true)}</span></div>` : ""}</div>`
+    + secCards
+    + `<div class="row sb wrap mt mb"><div class="seg bsecseg">${[["all", "All"]].concat(Object.keys(BTYPE).map(k => [k, BTYPE[k][0]])).map(([k, l]) => `<button class="${BS === k ? "on" : ""}" data-act="bookSec" data-v="${k}">${k === "all" ? "" : BTYPE[k][1] + " "}${l}</button>`).join("")}</div></div>`
+    + `<div class="row sb wrap mb"><div class="seg">${[["todo", "To book · " + todo.length], ["done", "Booked · " + done.length], ["all", "Both"]].map(([k, l]) => `<button class="${BF === k ? "on" : ""}" data-act="bookFilter" data-v="${k}">${l}</button>`).join("")}</div><span class="tiny muted">Tick it when it's booked${S1 ? "" : " – everyone sees it"}</span></div>`
+    + (list.length ? `<div class="card"><div class="bhead"><span></span><span>What</span><span>Where</span><span>When</span><span>Cost</span><span></span></div><div class="blist">${list.map(row).join("")}</div></div>` : `<div class="empty">${every.length ? (BF === "todo" ? "Everything here is booked. 🎉" : "Nothing here yet.") : "Add your stays, flights, rental car and tours – then tick them off as you book."}<br><button class="btn sm mt" data-act="bookAdd">${ic("plus")}Add a booking</button></div>`);
 }
 
 // ------------------------------------------------------------ ideas
@@ -1460,7 +1493,7 @@ function vMoneySolo() {
 }
 function expRow(e) {
   const s = shares(e), ids = Object.keys(s), p = mem(e.paidBy);
-  const sub = e.kind === "transfer" ? `payment to ${esc(mem(e.to).name)}` : solo() ? (CATS[e.cat] || CATS.other)[0] : `${esc(p.name)} paid · ${ids.length === members().length ? "split by everyone" : "for " + ids.map(id => esc(mem(id).name)).join(", ")}`;
+  const sub = (e.plan ? "from Book & budget · " : "") + (e.kind === "transfer" ? `payment to ${esc(mem(e.to).name)}` : solo() ? (CATS[e.cat] || CATS.other)[0] : `${esc(p.name)} paid · ${ids.length === members().length ? "split by everyone" : "for " + ids.map(id => esc(mem(id).name)).join(", ")}`);
   return `<div class="item click" data-act="expEdit" data-id="${e.id}">${e.kind === "transfer" ? `<span class="emo">${ic("swap")}</span>` : `<span class="emo">${(CATS[e.cat] || CATS.other)[1]}</span>`}<div class="grow"><div class="nm">${esc(e.title || (e.kind === "transfer" ? "Payment" : "Expense"))}</div><div class="tiny muted">${sub}${e.cur && e.cur !== info().cur ? ` · ${money(num(e.amount), e.cur)}` : ""}</div></div><span class="amt">${money(inTrip(e))}</span></div>`;
 }
 function donutSvg(parts, big, small) {
@@ -1748,6 +1781,7 @@ function settleSave(id) {
 
 // ------------------------------------------------------------ idea & plan item (same fields; a plan item has a day and time)
 function itemModal(kind, id, pre = {}) {
+  if (kind === "plan") return bookModal(id, pre);
   const col = kind === "idea" ? "ideas" : "plan", x = id ? D()[col][id] : { ...pre }, i = info();
   PH = { id: x.photo || "", file: null, drop: false };
   const td = tripDays();
@@ -1770,6 +1804,7 @@ function wirePhoto(m) {
   f.addEventListener("change", () => { const file = f.files[0]; if (!file) return; PH.file = file; PH.drop = false; const u = URL.createObjectURL(file); m.querySelector("#pf").firstElementChild.outerHTML = `<img src="${u}" alt="">`; });
 }
 async function itemSave(kind, id, from) {
+  if (kind === "plan") return bookSave(id, from);
   const col = kind === "idea" ? "ideas" : "plan", t = val("iTitle"), i = info();
   if (!t) return $("#iErr").textContent = "Give it a name.";
   if (DEMO && PH.file) { PH.file = null; toast("Photos work in the full app."); }
@@ -1782,6 +1817,60 @@ async function itemSave(kind, id, from) {
   put(col, rec);
   if (kind === "plan" && from && D().ideas[from]) put("ideas", { ...D().ideas[from], planned: rec.date });
   closeModal(); rerender(); toast(kind === "idea" ? (id ? "Saved." : solo() ? "Added to your ideas." : "Added – the group can vote now.") : "Added to " + dlong(rec.date) + ".");
+}
+function bookModal(id, pre = {}) {
+  const x = id ? D().plan[id] : { itin: true, ...pre }, i = info(), S1 = solo(), ms = members(), t = BTYPE[x.type] ? x.type : (pre.type || "activity");
+  PH = { id: x.photo || "", file: null, drop: false };
+  const [l1, l2] = endLab(t), split = x.splitW && x.splitW.length ? x.splitW : ms.map(m => m.id);
+  const show = (types, html) => `<div data-for="${types}" style="${types.split(",").includes(t) ? "" : "display:none"}">${html}</div>`;
+  const m = modal(id ? "Edit" : pre.fromBook ? "Add a booking" : "Add to itinerary", `
+    <div class="field"><label>Type</label><div class="seg btseg" id="iType">${Object.keys(BTYPE).map(k => `<button type="button" class="${k === t ? "on" : ""}" data-act="btSeg" data-v="${k}">${BTYPE[k][1]} ${BTYPE[k][0].split(" ")[0].replace("Tours", "Activity").replace("Flights", "Travel").replace("Accommodation", "Stay")}</button>`).join("")}</div></div>
+    ${field("What", `<input class="inp" id="iTitle" value="${esc(x.title || "")}" placeholder="e.g. Pena Palace tickets, Airbnb Alfama, Rental car" autofocus>`)}
+    ${show("activity,food,other", field("Category", `<select class="inp" id="iCat"><option value="">Pick a category (optional)</option>${BCATS.map(c => opt(c, c, x.cat || "")).join("")}${x.cat && !BCATS.includes(x.cat) ? opt(x.cat, x.cat, x.cat) : ""}</select>`))}
+    <div class="frow"><div class="field"><label id="iL1">${l1}</label><input class="inp" type="date" id="iDate" value="${esc(x.date || pre.date || i.start || today())}"></div>${field("Time", `<input class="inp" type="time" id="iTime" value="${esc(x.time || "")}">`)}</div>
+    ${show("stay,travel", `<div class="frow"><div class="field"><label id="iL2">${l2}</label><input class="inp" type="date" id="iDate2" value="${esc(x.date2 || "")}"></div>${field("Time", `<input class="inp" type="time" id="iTime2" value="${esc(x.time2 || "")}">`)}</div>`)}
+    ${field("Where", `<input class="inp" id="iPlace" value="${esc(x.place || "")}" placeholder="Address or name – opens in Maps">`)}
+    <div class="frow">${field("Cost", `<input class="inp" id="iCost" inputmode="decimal" value="${x.cost ? esc(x.cost) : ""}" placeholder="0">`)}${S1 ? `<input type="hidden" id="iPer" value="person">` : field("Counts", `<select class="inp" id="iPer">${opt("person", "per person", x.per || (t === "stay" || t === "travel" ? "group" : "person"))}${opt("group", "for the whole group", x.per || (t === "stay" || t === "travel" ? "group" : ""))}</select>`)}</div>
+    ${field("Currency", curSel("iCur", x.ccur || i.cur))}
+    ${field("Link", `<input class="inp" id="iLink" value="${esc(x.link || "")}" placeholder="Booking, website or review (optional)">`)}
+    ${field("Booking", `<div class="seg bkseg" id="iBk">${[["none", "Not needed"], ["todo", "Still to book"], ["done", "Booked"]].map(([k, l]) => `<button type="button" class="${(id ? bkOf(x) : x.bk || "none") === k ? "on" : ""}" data-act="bkSeg" data-v="${k}">${l}</button>`).join("")}</div>`)}
+    ${S1 ? "" : `<div class="frow">${field("Who organises it", `<select class="inp" id="iOrg"><option value="">Nobody yet</option>${ms.map(mm => opt(mm.id, mm.name + (mm.id === me() ? " (you)" : ""), x.org || "")).join("")}</select>`)}${field("Who pays", `<select class="inp" id="iPay"><option value="">Not decided yet</option>${ms.map(mm => opt(mm.id, mm.name + (mm.id === me() ? " (you)" : ""), x.payBy || "")).join("")}</select>`)}</div>
+    ${field("Split between", `<div class="row wrap" style="gap:6px" id="iSplit">${ms.map(mm => `<button type="button" class="chip ${split.includes(mm.id) ? "on" : ""}" data-act="splitTog" data-v="${mm.id}">${av(mm, "xs")} ${esc(mm.name)}</button>`).join("")}</div>`, "When it's <b>booked</b> and someone pays, it goes into Money by itself – split between these people.")}`}
+    <label class="bookchk"><input type="checkbox" id="iItin" ${x.itin === false ? "" : "checked"}><span><b>Show in the itinerary</b><small>Untick for things like a rental car – it stays in Book & budget and Money</small></span></label>
+    ${photoField(PH.id)}
+    ${field("Notes", `<textarea class="inp" id="iNote" rows="2" placeholder="Confirmation details, opening hours, why it's great…">${esc(x.note || "")}</textarea>`)}
+    <p class="small badc" id="iErr"></p>`,
+    `${id ? `<button class="btn danger" data-act="itemDel" data-k="plan" data-id="${id}">${ic("trash")}Delete</button>` : ""}<button class="btn" data-act="close">Cancel</button><button class="btn pri" data-act="itemSave" data-k="plan" data-id="${id || ""}" data-from="${pre.from || ""}">Save</button>`);
+  wirePhoto(m);
+}
+// a booked item that someone paid for becomes an expense in Money (and goes away again when it's un-booked)
+function syncBookExp(p) {
+  const eid = "bx" + p.id, ex = D().exp[eid], ms = members();
+  const who = (p.splitW && p.splitW.length ? p.splitW : ms.map(m => m.id)).filter(k => D().members[k] && !D().members[k].del);
+  const want = !p.del && p.bk === "done" && p.payBy && D().members[p.payBy] && num(p.cost) > 0 && who.length;
+  if (!want) { if (ex && !ex.del) del("exp", eid); return false; }
+  const amount = r2(p.per === "group" || solo() ? num(p.cost) : num(p.cost) * who.length);
+  put("exp", { id: eid, kind: "spend", title: p.title.slice(0, 80), amount, cur: p.ccur || info().cur, rate: num(p.crate) || 1, paidBy: p.payBy, date: p.date || today(), cat: BTYPE[typeOf(p)][2], mode: "equal", split: Object.fromEntries(who.map(k => [k, 1])), plan: p.id, ts: ex && ex.ts || now() });
+  return true;
+}
+async function bookSave(id, from) {
+  const t = val("iTitle"), i = info(); if (!t) return $("#iErr").textContent = "Give it a name.";
+  const type = (($("#iType .on") || {}).dataset || {}).v || "activity", d1 = val("iDate") || i.start || today(), d2 = ["stay", "travel"].includes(type) ? val("iDate2") : "";
+  if (d2 && d2 < d1) return $("#iErr").textContent = "The end date is before the start date.";
+  if (DEMO && PH.file) { PH.file = null; toast("Photos work in the full app."); }
+  let pid = PH.drop ? "" : PH.id;
+  if (PH.file) { const n2 = await addPhoto(PH.file); if (n2) { if (PH.id) del("photos", PH.id); pid = n2; } } else if (PH.drop && PH.id) del("photos", PH.id);
+  const c = val("iCur") || i.cur, rate = c === i.cur ? 1 : num((i.rates || {})[c]) || 1, lk = val("iLink");
+  const old = id && D().plan[id] ? D().plan[id] : null, bk = (($("#iBk .on") || {}).dataset || {}).v || "none";
+  const rec = { id: id || uid(), type, title: t.slice(0, 80), cat: ["activity", "food", "other"].includes(type) ? val("iCat") : "", date: d1, time: val("iTime"), date2: d2, time2: d2 ? val("iTime2") : "", place: val("iPlace").slice(0, 160), cost: num(val("iCost")), per: val("iPer") || "person", ccur: c, crate: rate, photo: pid,
+    link: /^https?:\/\//i.test(lk) ? lk.slice(0, 400) : (lk ? "https://" + lk.slice(0, 400) : ""), note: val("iNote").slice(0, 600), bk, itin: !!($("#iItin") || {}).checked,
+    org: solo() ? "" : val("iOrg"), payBy: solo() ? me() : val("iPay"), splitW: solo() ? [me()] : [...document.querySelectorAll("#iSplit .chip.on")].map(b2 => b2.dataset.v) };
+  if (!solo() && !rec.splitW.length) return $("#iErr").textContent = "Pick at least one person to split with.";
+  if (bk === "done" && (!old || bkOf(old) !== "done")) rec.bookedBy = me();
+  if (from) rec.idea = from;
+  const r = put("plan", rec), inMoney = syncBookExp(r);
+  if (from && D().ideas[from]) put("ideas", { ...D().ideas[from], planned: rec.date });
+  closeModal(); rerender(); toast(inMoney ? `Saved – and added to Money: ${esc(mem(rec.payBy).name)} paid.` : rec.itin ? (id ? "Saved." : "Added to " + dlong(rec.date) + ".") : "Saved in Book & budget.");
 }
 function ideaToPlan(id) {
   const x = D().ideas[id]; if (!x) return;
@@ -1900,13 +1989,17 @@ const ACT = {
   ideaAdd: () => { closeModal(); itemModal("idea"); }, ideaEdit: d => itemModal("idea", d.id), ideaPlan: d => ideaToPlan(d.id),
   ideaFilter: d => { IF = d.v; rerender(); },
   vote: d => { if (!me()) return whoAmI(); const k = d.id + "|" + me(), v = D().votes[k]; put("votes", { id: k, idea: d.id, who: me(), on: !(v && v.on) }); rerender(); },
-  bookTog: d => { const p = D().plan[d.id]; if (!p) return; const was = isBooked(p); put("plan", { ...p, bk: was ? "todo" : "done", bookedBy: was ? "" : me() }); rerender(); if (!was) toast(`${esc(p.title)} is booked.`); },
+  bookTog: d => { const p = D().plan[d.id]; if (!p) return; const was = isBooked(p), r = put("plan", { ...p, bk: was ? "todo" : "done", bookedBy: was ? "" : me() }), inM = syncBookExp(r); rerender(); if (!was) toast(inM ? `${esc(p.title)} is booked – added to Money.` : p.payBy || solo() ? `${esc(p.title)} is booked.` : `${esc(p.title)} is booked. Pick who pays to add it to Money.`); },
+  bookSec: d => { BS = d.v; rerender(); },
+  bookAdd: () => { closeModal(); bookModal(null, { fromBook: true, bk: "todo", type: BS !== "all" ? BS : "stay", date: info().start || today(), itin: true }); },
+  btSeg: (d, el) => { el.parentNode.querySelectorAll("button").forEach(b2 => b2.classList.toggle("on", b2 === el)); const m = el.closest(".modal") || document; m.querySelectorAll("[data-for]").forEach(x => x.style.display = x.dataset.for.split(",").includes(d.v) ? "" : "none"); const [a1, a2] = endLab(d.v); const L1 = m.querySelector("#iL1"), L2 = m.querySelector("#iL2"); if (L1) L1.textContent = a1; if (L2) L2.textContent = a2; const per = m.querySelector("#iPer"); if (per && !per.dataset.touched) per.value = ["stay", "travel"].includes(d.v) ? "group" : "person"; },
+  splitTog: (d, el) => el.classList.toggle("on"),
   bookFilter: d => { BF = d.v; rerender(); },
   bkSeg: (d, el) => { el.parentNode.querySelectorAll("button").forEach(b => b.classList.toggle("on", b === el)); },
   bookWallet: d => { const p = D().plan[d.id]; walletFromPlan(p); },
   planAdd: d => { closeModal(); itemModal("plan", null, { date: d.d || (phase().k === "during" ? today() : tripDays()[0]) }); }, planEdit: d => itemModal("plan", d.id),
   itemSave: d => itemSave(d.k, d.id, d.from),
-  itemDel: d => { const col = d.k === "idea" ? "ideas" : "plan", x = D()[col][d.id]; del(col, d.id); if (d.k === "plan" && x.idea && D().ideas[x.idea]) put("ideas", { ...D().ideas[x.idea], planned: "" }); closeModal(); rerender(); toast("Deleted.", () => { put(col, { ...x, del: false }); rerender(); }); },
+  itemDel: d => { const col = d.k === "idea" ? "ideas" : "plan", x = D()[col][d.id]; del(col, d.id); if (col === "plan" && D().exp["bx" + d.id] && !D().exp["bx" + d.id].del) del("exp", "bx" + d.id); if (d.k === "plan" && x.idea && D().ideas[x.idea]) put("ideas", { ...D().ideas[x.idea], planned: "" }); closeModal(); rerender(); toast("Deleted.", () => { put(col, { ...x, del: false }); rerender(); }); },
   pickPhoto: () => { const f = $("#pfFile"); if (f) f.click(); },
   dropPhoto: () => { PH.drop = true; PH.file = null; const pf = $("#pf"); if (pf) pf.firstElementChild.outerHTML = `<span>${ic("camera")}</span>`; },
   viewPhoto: d => viewPhoto(d.id),
